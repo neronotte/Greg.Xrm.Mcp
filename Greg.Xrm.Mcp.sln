@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.FormEngineer", "src\Greg.Xrm.Mcp.FormEngineer\Greg.Xrm.Mcp.FormEngineer.csproj", "{9E0E7035-5081-4EF1-97D0-E925A2A54D83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.Core", "src\Greg.Xrm.Mcp.Core\Greg.Xrm.Mcp.Core.csproj", "{860E833B-1846-4192-8372-C27D3191972E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E0E7035-5081-4EF1-97D0-E925A2A54D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E0E7035-5081-4EF1-97D0-E925A2A54D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E0E7035-5081-4EF1-97D0-E925A2A54D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E0E7035-5081-4EF1-97D0-E925A2A54D83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{860E833B-1846-4192-8372-C27D3191972E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{860E833B-1846-4192-8372-C27D3191972E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{860E833B-1846-4192-8372-C27D3191972E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{860E833B-1846-4192-8372-C27D3191972E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EF6D5B30-57F6-4700-B183-6924647DE993}
+	EndGlobalSection
+EndGlobal

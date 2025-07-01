@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+Survey Template Form Backup
+Table: ava_survey_template
+Form ID: 4374f671-b946-466d-8be0-b08496ac2a1c
+Form Name: Information
+Form Type: Main
+Backup Date: 2025-07-01
+-->
+<form headerdensity="HighWithControls">
+    <tabs>
+        <tab verticallayout="true" id="{c1e64dde-3d4d-4ebe-a52e-3a099bb7d0a6}" IsUserDefined="1"
+            name="tab_general">
+            <labels>
+                <label description="💩 General" languagecode="1033" />
+            </labels>
+            <columns>
+                <column width="100%">
+                    <sections>
+                        <section showlabel="false" showbar="false" IsUserDefined="0"
+                            id="{74043b46-0d02-420d-ad25-290e088ef00e}"
+                            name="tab_general_sec_general">
+                            <labels>
+                                <label description="General" languagecode="1033" />
+                            </labels>
+                            <rows>
+                                <row>
+                                    <cell id="{36f0f8dd-956b-4384-a4a3-984b79ba6be1}">
+                                        <labels>
+                                            <label description="Name" languagecode="1033" />
+                                        </labels>
+                                        <control id="ava_name"
+                                            classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}"
+                                            datafieldname="ava_name" />
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell id="{f614118c-50ed-4def-9fe8-440f73d8b1d6}" locklevel="0"
+                                        colspan="1" rowspan="1">
+                                        <labels>
+                                            <label description="Base Language" languagecode="1033" />
+                                        </labels>
+                                        <control id="ava_baselanguageid"
+                                            classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}"
+                                            datafieldname="ava_baselanguageid" disabled="false" />
+                                    </cell>
+                                </row>
+                            </rows>
+                        </section>
+                        <section name="tab_general_section_questions"
+                            id="fe21a116-90f4-45e2-b83d-3acf13ce71f8" IsUserDefined="0"
+                            locklevel="0" showlabel="false" showbar="false" layout="varwidth"
+                            celllabelalignment="Left" celllabelposition="Left" columns="1"
+                            labelwidth="115">
+                            <labels>
+                                <label description="New Section" languagecode="1033" />
+                            </labels>
+                            <rows>
+                                <row />
+                                <row>
+                                    <cell locklevel="0" id="{a5c149be-2f97-42cb-ae68-c1e94762fb44}"
+                                        rowspan="4" colspan="1" auto="false">
+                                        <labels>
+                                            <label description="Questions" languagecode="1033" />
+                                        </labels>
+                                        <control indicationOfSubgrid="true" id="subgrid_question"
+                                            classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                                            <parameters>
+                                                <RecordsPerPage>10</RecordsPerPage>
+                                                <AutoExpand>Fixed</AutoExpand>
+                                                <EnableQuickFind>false</EnableQuickFind>
+                                                <EnableViewPicker>false</EnableViewPicker>
+                                                <EnableChartPicker>true</EnableChartPicker>
+                                                <ChartGridMode>All</ChartGridMode>
+                                                <RelationshipName>
+                                                    ava_survey_surveyquestiontemplate_survey_template</RelationshipName>
+                                                <TargetEntityType>ava_survey_surveyquestiontemplate</TargetEntityType>
+                                                <ViewId>{34a95c29-a63f-4616-8475-9e7b071e5319}</ViewId>
+                                                <ViewIds>{34a95c29-a63f-4616-8475-9e7b071e5319}</ViewIds>
+                                            </parameters>
+                                        </control>
+                                    </cell>
+                                </row>
+                                <row />
+                                <row />
+                                <row />
+                            </rows>
+                        </section>
+                    </sections>
+                </column>
+            </columns>
+        </tab>
+        <tab name="tab_admin" id="c6e487fc-d85c-41b3-b595-b1e98e6a6c25" IsUserDefined="0"
+            locklevel="0" showlabel="true">
+            <labels>
+                <label description="💩 Administration" languagecode="1033" />
+            </labels>
+            <columns>
+                <column width="100%">
+                    <sections>
+                        <section name="tab_admin_sec_admin"
+                            id="0a168f83-fd36-46d6-943f-81a9c32f824a" IsUserDefined="0"
+                            locklevel="0" showlabel="false" showbar="false" layout="varwidth"
+                            celllabelalignment="Left" celllabelposition="Left" columns="11"
+                            labelwidth="115">
+                            <labels>
+                                <label description="Administration" languagecode="1033" />
+                            </labels>
+                            <rows>
+                                <row>
+                                    <cell id="{64c5a7c4-953c-4132-9de0-f85671e4057e}" locklevel="0"
+                                        colspan="1" rowspan="1">
+                                        <labels>
+                                            <label description="Created By" languagecode="1033" />
+                                        </labels>
+                                        <control id="createdby"
+                                            classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}"
+                                            datafieldname="createdby" disabled="false" />
+                                    </cell>
+                                    <cell id="{ff521db2-ec42-45d8-9977-abb78536a266}" locklevel="0"
+                                        colspan="1" rowspan="1">
+                                        <labels>
+                                            <label description="Created On" languagecode="1033" />
+                                        </labels>
+                                        <control id="createdon"
+                                            classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}"
+                                            datafieldname="createdon" disabled="false" />
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell id="{6cb1ff48-91d7-4d3d-b5bc-f33680e0b46b}" locklevel="0"
+                                        colspan="1" rowspan="1">
+                                        <labels>
+                                            <label description="Modified By" languagecode="1033" />
+                                        </labels>
+                                        <control id="modifiedby"
+                                            classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}"
+                                            datafieldname="modifiedby" disabled="false" />
+                                    </cell>
+                                    <cell id="{396efcb8-1467-49d7-91a1-f707a95b1a31}" locklevel="0"
+                                        colspan="1" rowspan="1">
+                                        <labels>
+                                            <label description="Modified On" languagecode="1033" />
+                                        </labels>
+                                        <control id="modifiedon"
+                                            classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}"
+                                            datafieldname="modifiedon" disabled="false" />
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell id="{cbe565d0-a291-402c-9085-6ce883e47f23}" locklevel="0"
+                                        colspan="1" rowspan="1">
+                                        <labels>
+                                            <label description="Owner" languagecode="1033" />
+                                        </labels>
+                                        <control id="ownerid"
+                                            classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}"
+                                            datafieldname="ownerid" />
+                                    </cell>
+                                    <cell id="{0ccbc707-8ff6-49a1-8e90-4dc0e410ecb4}" locklevel="0">
+                                        <labels>
+                                            <label description="" languagecode="1033" />
+                                        </labels>
+                                    </cell>
+                                </row>
+                            </rows>
+                        </section>
+                    </sections>
+                </column>
+            </columns>
+        </tab>
+    </tabs>
+    <header id="{d56f0347-806d-4311-88b6-c4d39e0ddceb}" celllabelposition="Top" columns="111"
+        labelwidth="115" celllabelalignment="Left">
+        <rows>
+            <row>
+                <cell id="{61d61bcc-93ea-4e98-b6e3-2f5f698dc919}" showlabel="false">
+                    <labels>
+                        <label description="" languagecode="1033" />
+                    </labels>
+                </cell>
+                <cell id="{b68db375-208a-493f-a66c-f0519ef8fecd}" showlabel="false">
+                    <labels>
+                        <label description="" languagecode="1033" />
+                    </labels>
+                </cell>
+                <cell id="{01164758-4e9a-4028-973b-decc0e303d0c}" showlabel="false">
+                    <labels>
+                        <label description="" languagecode="1033" />
+                    </labels>
+                </cell>
+            </row>
+        </rows>
+    </header>
+    <footer id="{55ccf40d-efe2-4081-bf41-40a533510909}" celllabelposition="Top" columns="111"
+        labelwidth="115" celllabelalignment="Left">
+        <rows>
+            <row>
+                <cell id="{3336f2f2-7117-4b94-83ae-abf6fe42b3d9}" showlabel="false">
+                    <labels>
+                        <label description="" languagecode="1033" />
+                    </labels>
+                </cell>
+                <cell id="{c0d84e90-fc15-4ea3-8005-f26e926ad575}" showlabel="false">
+                    <labels>
+                        <label description="" languagecode="1033" />
+                    </labels>
+                </cell>
+                <cell id="{141aeeaf-2863-467e-a15f-e9fc889c2d55}" showlabel="false">
+                    <labels>
+                        <label description="" languagecode="1033" />
+                    </labels>
+                </cell>
+            </row>
+        </rows>
+    </footer>
+    <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+    </DisplayConditions>
+    <controlDescriptions />
+</form>
