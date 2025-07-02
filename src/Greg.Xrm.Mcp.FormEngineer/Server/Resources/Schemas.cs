@@ -9,7 +9,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Resources
 	{
 		protected Schemas() { }
 
-		[McpServerResource(MimeType = "application/xml", Name = "FormXml Schema", Title = "Dataverse FormXML Schema", UriTemplate = "schema://formxml"),
+		[McpServerResource(MimeType = "application/xml", Name = "formxml_schema", Title = "Dataverse FormXML Schema", UriTemplate = "schema://formxml"),
 		Description("Returns the FormXML schema used in Dataverse forms. This schema defines the structure and elements used in the FormXML format."),
 		]
 		public static string FormXmlSchema() => 

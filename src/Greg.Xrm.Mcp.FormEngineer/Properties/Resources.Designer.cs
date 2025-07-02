@@ -69,35 +69,5 @@ namespace Greg.Xrm.Mcp.FormEngineer.Properties {
                 return ((byte[])(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Clean the form of table {tablename} by applying the following rules:
-        ///
-        ///- If the form contains any tab without an unique name (`name` attribute of the `tab` xml element), generate one called `tab_$name`, where $name is the label of the tab, all lowercase, without spaces or special characters.
-        ///- If the form contains any section without an unique name (`name` attribute of the `section` xml element), generate one called `$tabname_sec_$name`, where $tabname is the unique name of the tab that contains the secti [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string prompt_clean {
-            get {
-                return ResourceManager.GetString("prompt_clean", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # Context
-        ///
-        ///You are an expert power platform developer skilled in dataverse tables form manipulation tweaking directly the form XML definition.
-        ///You can be asked to perform operations towards dataverse forms.
-        ///Keep in mind the instructions below to perform the requested tasks effectively
-        ///
-        ///# Rules
-        ///
-        ///- Always create a copy of the form XML in the local workspace before making any changes. The local copy should be saved in a file called $tableschemaname}\_$formid\_$DateTime.Now:yyyyMMddhhmmss.xml
-        ///- If not  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string prompt_main {
-            get {
-                return ResourceManager.GetString("prompt_main", resourceCulture);
-            }
-        }
     }
 }

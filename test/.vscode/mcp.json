@@ -5,17 +5,14 @@
             "args": [
                 "run",
                 "--project",
-                "C:\\Sources\\Greg.Xrm.Mcp\\src\\Greg.Xrm.Mcp.FormEngineer\\Greg.Xrm.Mcp.FormEngineer.csproj",
+                "${workspaceFolder}\\..\\src\\Greg.Xrm.Mcp.FormEngineer\\Greg.Xrm.Mcp.FormEngineer.csproj",
                 "--configuration",
                 "Release",
                 "--",
                 "--dataverseUrl",
                 "https://rgsurvey.crm4.dynamics.com/",
             ],
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
+            "cwd": "${workspaceFolder}"
         }
     }
 }
