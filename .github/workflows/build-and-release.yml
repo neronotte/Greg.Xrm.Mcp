@@ -49,6 +49,11 @@ env:
   NuGetDirectory: ${{ github.workspace}}\nuget
   CurrentVersion: ""
 
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
 jobs:
   build:
     runs-on: windows-latest  # For a list of available runner types, refer to
