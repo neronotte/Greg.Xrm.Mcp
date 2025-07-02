@@ -83,6 +83,13 @@ Add the MCP server configuration to your GitHub Copilot settings:
 
 This project is licensed under the [MIT License](https://github.com/neronotte/Greg.Xrm.Mcp/blob/main/LICENSE).
 
+## 🏳️ Important Disclaimer 🏳️
+
+The tool is in preview and provided as it is.
+Always backup your existing customizations before making any changes.
+The brain of the tool is your favorite LLM companion, that by definition is not deterministic.
+The author is not responsible of any issue that can be generated on your form customization by the misuse of the tool.
+
 ---
 
 *Made with ❤️ for the Power Platform community*

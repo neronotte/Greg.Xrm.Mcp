@@ -80,6 +80,13 @@ For detailed setup and configuration instructions, see the [FormEngineer documen
 
 This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
 
+## 🏳️ Important Disclaimer 🏳️
+
+The tool is in preview and provided as it is.
+Always backup your existing customizations before making any changes.
+The brain of the tool is your favorite LLM companion, that by definition is not deterministic.
+The author is not responsible of any issue that can be generated on your form customization by the misuse of the tool.
+
 ---
 
 Made with ❤️ for the Power Platform community.
