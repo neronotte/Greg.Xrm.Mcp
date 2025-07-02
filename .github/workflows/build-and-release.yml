@@ -101,6 +101,7 @@ jobs:
       run: |
         $version = Get-Content $env:GITHUB_WORKSPACE/version.txt
         dotnet build --configuration Release /p:Version=$version
+        dotnet pack src\Greg.Xrm.Mcp.FormEngineer\Greg.Xrm.Mcp.FormEngineer.csproj --configuration Release /p:Version=$version --output ${{ env.NuGetDirectory }}
         
     - name: Upload NuGet Package as artifact
       uses: actions/upload-artifact@v4
