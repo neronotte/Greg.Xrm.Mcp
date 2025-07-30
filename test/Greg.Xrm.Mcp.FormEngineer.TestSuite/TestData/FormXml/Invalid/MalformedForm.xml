@@ -1,0 +1,6 @@
+<form>
+	<tab name="general">
+		<unclosed_element>
+			<another_unclosed>
+	</tab>
+</form>

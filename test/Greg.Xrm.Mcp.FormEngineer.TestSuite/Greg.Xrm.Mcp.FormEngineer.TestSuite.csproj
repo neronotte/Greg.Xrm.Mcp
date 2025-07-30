@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TestData\Fixtures\**" />
+    <Compile Remove="TestData\FormXml\Schemas\**" />
+    <Compile Remove="TestHelpers\Extensions\**" />
+    <Compile Remove="TestHelpers\Mocks\**" />
+    <EmbeddedResource Remove="TestData\Fixtures\**" />
+    <EmbeddedResource Remove="TestData\FormXml\Schemas\**" />
+    <EmbeddedResource Remove="TestHelpers\Extensions\**" />
+    <EmbeddedResource Remove="TestHelpers\Mocks\**" />
+    <None Remove="TestData\Fixtures\**" />
+    <None Remove="TestData\FormXml\Schemas\**" />
+    <None Remove="TestHelpers\Extensions\**" />
+    <None Remove="TestHelpers\Mocks\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.9" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.9.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Greg.Xrm.Mcp.FormEngineer\Greg.Xrm.Mcp.FormEngineer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+    <Using Include="NSubstitute" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Integration\Server\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestData\FormXml\Invalid\MalformedForm.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\FormXml\Valid\AccountMainForm.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

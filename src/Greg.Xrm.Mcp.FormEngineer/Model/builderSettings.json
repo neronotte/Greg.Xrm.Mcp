@@ -1,0 +1,19 @@
+﻿{
+  "suppressINotifyPattern": false,
+  "suppressGeneratedCodeAttribute": false,
+  "language": "CS",
+  "namespace": "Greg.Xrm.Mcp.FormEngineer.Model",
+  "generateSdkMessages": false,
+  "generateGlobalOptionSets": false,
+  "emitFieldsClasses": false,
+  "entityTypesFolder": "Entities",
+  "messagesTypesFolder": "Messages",
+  "optionSetsTypesFolder": "OptionSets",
+  "entityNamesFilter": [
+    "systemform",
+    "savedquery",
+    "userquery"
+  ],
+  "emitEntityETC": false,
+  "emitVirtualAttributes": false
+}

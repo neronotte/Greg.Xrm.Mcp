@@ -11,8 +11,11 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Prompts
 		Description("Clean the form of a custom dataverse table from all the issues that are generated automatically on creation.")]
 		public static ChatMessage CleanForm(
 		[Description("The schema name of the dataverse table to clean")] string tableName
-		) =>
-			new(ChatRole.User, @"
+		)
+		{
+
+
+			return new(ChatRole.User, @"
 Clean the form of table {tablename} by applying the following rules:
 
 - If the form contains any tab without an unique name (`name` attribute of the `tab` xml element), generate one called `tab_$name`, where $name is the label of the tab, all lowercase, without spaces or special characters.
@@ -30,5 +33,7 @@ Clean the form of table {tablename} by applying the following rules:
   - `ownerid` (third row, first column)	
 
 ".Replace("{tablename}", tableName));
+		}
+			
 	}
 }

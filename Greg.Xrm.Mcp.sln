@@ -1,11 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36221.1 d17.14
+VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.FormEngineer", "src\Greg.Xrm.Mcp.FormEngineer\Greg.Xrm.Mcp.FormEngineer.csproj", "{9E0E7035-5081-4EF1-97D0-E925A2A54D83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.Core", "src\Greg.Xrm.Mcp.Core\Greg.Xrm.Mcp.Core.csproj", "{860E833B-1846-4192-8372-C27D3191972E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9969CE0E-FD11-42C0-BCB1-FAB1E6878349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.FormEngineer.TestSuite", "test\Greg.Xrm.Mcp.FormEngineer.TestSuite\Greg.Xrm.Mcp.FormEngineer.TestSuite.csproj", "{CAA958F4-4159-445F-ACE3-AAE34B99C998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.FormEngineer.ConsoleUI", "test\Greg.Xrm.Mcp.FormEngineer.ConsoleUI\Greg.Xrm.Mcp.FormEngineer.ConsoleUI.csproj", "{D261C99D-93A4-417D-A3B5-1A42E577541E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot-instructions.md = .github\copilot-instructions.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.Monitor", "src\Greg.Xrm.Mcp.Monitor\Greg.Xrm.Mcp.Monitor.csproj", "{1BBE12AE-065A-49EE-8152-21617CA1DFEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +36,28 @@ Global
 		{860E833B-1846-4192-8372-C27D3191972E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{860E833B-1846-4192-8372-C27D3191972E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{860E833B-1846-4192-8372-C27D3191972E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA958F4-4159-445F-ACE3-AAE34B99C998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA958F4-4159-445F-ACE3-AAE34B99C998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA958F4-4159-445F-ACE3-AAE34B99C998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA958F4-4159-445F-ACE3-AAE34B99C998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D261C99D-93A4-417D-A3B5-1A42E577541E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D261C99D-93A4-417D-A3B5-1A42E577541E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D261C99D-93A4-417D-A3B5-1A42E577541E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D261C99D-93A4-417D-A3B5-1A42E577541E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BBE12AE-065A-49EE-8152-21617CA1DFEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BBE12AE-065A-49EE-8152-21617CA1DFEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BBE12AE-065A-49EE-8152-21617CA1DFEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BBE12AE-065A-49EE-8152-21617CA1DFEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9E0E7035-5081-4EF1-97D0-E925A2A54D83} = {9969CE0E-FD11-42C0-BCB1-FAB1E6878349}
+		{860E833B-1846-4192-8372-C27D3191972E} = {9969CE0E-FD11-42C0-BCB1-FAB1E6878349}
+		{CAA958F4-4159-445F-ACE3-AAE34B99C998} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D261C99D-93A4-417D-A3B5-1A42E577541E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{1BBE12AE-065A-49EE-8152-21617CA1DFEF} = {9969CE0E-FD11-42C0-BCB1-FAB1E6878349}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF6D5B30-57F6-4700-B183-6924647DE993}

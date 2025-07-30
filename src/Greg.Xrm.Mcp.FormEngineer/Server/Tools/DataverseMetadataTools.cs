@@ -10,15 +10,27 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 	[McpServerToolType]
 	public class DataverseMetadataTools
 	{
-		protected DataverseMetadataTools() { }
+		protected DataverseMetadataTools()
+		{
+			// This constructor is intentionally empty.
+			// It is used to ensure that the class can be instantiated without any parameters.
+		}
 
-		[McpServerTool,
-		Description("Retrieves the list of tables from the Dataverse environment. For each table, returns schema name and display name"),]
+
+		[McpServerTool(
+			Name = "dataverse_metadata_list_tables",
+			Idempotent = true,
+			Destructive = false,
+			ReadOnly = true
+		),
+		Description(
+"Retrieves the list of tables from the Dataverse environment. For each table, returns schema name and display name"),]
 		public static async Task<string> RetrieveDataverseTables(
 			ILogger<DataverseMetadataTools> logger,
 			IDataverseClientProvider clientProvider)
 		{
-			logger.LogInformation("Starting to retrieve Dataverse tables...");
+			logger.LogTrace("{ToolName} called.",
+				   nameof(RetrieveDataverseTables));
 
 			try
 			{
@@ -37,9 +49,12 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 				.OrderBy(e => e.SchemaName)
 				.ToList();
 
-				logger.LogInformation("Retrieved {Count} tables from Dataverse.", result.Count);
+				logger.LogTrace("Retrieved {Count} tables from Dataverse.", result.Count);
 
 				var tablesText = JsonConvert.SerializeObject(result, Formatting.Indented);
+
+				logger.LogTrace("{Result}", tablesText);
+
 				return tablesText;
 			}
 			catch(Exception ex)
@@ -50,13 +65,24 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 		}
 
 
-		[McpServerTool,
-		Description("Retrieves the list of columns of a given Dataverse table. For each columns, returns schema name, display name and type."),]
+		[McpServerTool(
+			Name = "dataverse_metadata_list_table_columns",
+			ReadOnly =true,
+			Idempotent = true,
+			Destructive = false
+		),
+		Description(
+"Retrieves the list of columns of a given Dataverse table. For each columns, returns schema name, display name and type."),]
 		public static async Task<string> RetrieveDataverseTableColumns(
 			ILogger<DataverseMetadataTools> logger,
 			IDataverseClientProvider clientProvider,
 			[Description("The schema name of the table")] string tableName)
 		{
+			logger.LogTrace("{ToolName} called with parameters: TableName={TableName}",
+				   nameof(RetrieveDataverseTableColumns),
+				   tableName);
+
+
 			if (string.IsNullOrWhiteSpace(tableName))
 			{
 				logger.LogError("Table name cannot be null or empty.");
@@ -64,7 +90,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 			}
 
 
-			logger.LogInformation("Starting to retrieve Dataverse columns for table {TableName}...", tableName);
+			logger.LogTrace("Starting to retrieve Dataverse columns for table {TableName}...", tableName);
 
 			try
 			{
@@ -92,9 +118,11 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 				.OrderBy(e => e.SchemaName)
 				.ToList();
 
-				logger.LogInformation("Retrieved {Count} columns from Dataverse.", result.Count);
+				logger.LogTrace("Retrieved {Count} columns from Dataverse.", result.Count);
 
 				var tablesText = JsonConvert.SerializeObject(result, Formatting.Indented);
+
+				logger.LogTrace("{Result}", tablesText);
 				return tablesText;
 			}
 			catch (Exception ex)

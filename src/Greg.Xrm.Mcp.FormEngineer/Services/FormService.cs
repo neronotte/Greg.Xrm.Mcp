@@ -22,7 +22,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Services
 		{
 			try
 			{
-				logger.LogInformation("Recupero form per tabella: {EntityName}", entityLogicalName);
+				logger.LogDebug("Recupero form per tabella: {EntityName}", entityLogicalName);
 
 				// Valida che la tabella esista
 				if (!await ValidateEntityExistsAsync(client, entityLogicalName, cancellationToken))
@@ -58,12 +58,12 @@ namespace Greg.Xrm.Mcp.FormEngineer.Services
 				// Ordina per tipo e ordine form
 				query.AddOrder("type", OrderType.Ascending);
 
-				logger.LogInformation("Esecuzione query per recupero form: {Query}", JsonSerializer.Serialize(query));
+				logger.LogDebug("Esecuzione query per recupero form: {Query}", JsonSerializer.Serialize(query));
 
 
 				var result = await client.RetrieveMultipleAsync(query);
 
-				logger.LogInformation("Trovate {Count} form per {EntityName}", result.Entities.Count, entityLogicalName);
+				logger.LogDebug("Trovate {Count} form per {EntityName}", result.Entities.Count, entityLogicalName);
 
 				var forms = new List<SystemForm>();
 
@@ -101,7 +101,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Services
 		{
 			try
 			{
-				logger.LogInformation("Recupero form con ID: {FormId}", formId);
+				logger.LogDebug("Recupero form con ID: {FormId}", formId);
 
 				var entity = await client.RetrieveAsync("systemform", formId, new ColumnSet(
 					"formid", "name", "objecttypecode", "type", "description",
@@ -116,7 +116,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Services
 
 				var form = entity.ToEntity<SystemForm>();
 
-				logger.LogInformation("Form recuperata: {FormName} ({FormType})", form.Name, form.Type);
+				logger.LogDebug("Form recuperata: {FormName} ({FormType})", form.Name, form.Type);
 				return form;
 			}
 			catch (Exception ex)

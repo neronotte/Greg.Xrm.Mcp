@@ -16,7 +16,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 	/// Indicates the form state that is Active\Inactive.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.11")]
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.15")]
 	public enum systemform_formactivationstate
 	{
 		
@@ -31,7 +31,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 	/// Indicates the form layout is refreshed.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.11")]
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.15")]
 	public enum systemform_formpresentation
 	{
 		
@@ -49,7 +49,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 	/// Identifies the form type.
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.11")]
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.15")]
 	public enum systemform_type
 	{
 		
@@ -113,7 +113,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
 	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("systemform")]
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.11")]
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.15")]
 	public partial class SystemForm : Microsoft.Xrm.Sdk.Entity, System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	{
 		

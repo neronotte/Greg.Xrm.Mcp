@@ -20,16 +20,48 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.6" />
+	  <None Remove="Resources\FormXml.xsd" />
+	  <None Remove="Resources\LayoutXml.xsd" />
+	  <None Remove="Resources\RibbonCore.xsd" />
+	  <None Remove="Resources\RibbonTypes.xsd" />
+	  <None Remove="Resources\RibbonWSS.xsd" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\FormXml.xsd">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	    <SubType>Designer</SubType>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Resources\FilterXml.xsd">
+	    <SubType>Designer</SubType>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Resources\RibbonCore.xsd">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	    <SubType>Designer</SubType>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Resources\RibbonTypes.xsd">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	    <SubType>Designer</SubType>
+	  </EmbeddedResource>
+		<EmbeddedResource Include="Resources\RibbonWSS.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\LayoutXml.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.7" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.7" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.7" />
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.9" />
-		<PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.1" />
-		<PackageReference Include="NLog.Extensions.Hosting" Version="6.0.1" />
-		<PackageReference Include="NLog.Extensions.Logging" Version="6.0.1" />
+		<PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.3" />
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,8 +69,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="NLog.config">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<None Update="appSettings.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="README.md">
 		  <Pack>True</Pack>
@@ -47,7 +79,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Model\" />
 		<Folder Include="Model\Messages\" />
 	</ItemGroup>
 

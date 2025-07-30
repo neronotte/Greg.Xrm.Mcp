@@ -28,7 +28,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 				base(service)
 		{
 		}
-		
+
 		/// <summary>
 		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.SystemForm"/> entities.
 		/// </summary>
@@ -37,6 +37,28 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 			get
 			{
 				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.SystemForm>();
+			}
+		}
+
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.SystemForm"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.SavedQuery> SavedQuerySet
+		{
+			get
+			{
+				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.SavedQuery>();
+			}
+		}
+
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.SystemForm"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.UserQuery> UserQuerySet
+		{
+			get
+			{
+				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.UserQuery>();
 			}
 		}
 	}

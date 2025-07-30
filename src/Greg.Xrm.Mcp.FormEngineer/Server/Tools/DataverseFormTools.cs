@@ -7,23 +7,42 @@ using ModelContextProtocol.Server;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Text;
-using System.Text.Json;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Schema;
 
 namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 {
 	/// <summary>
-	/// MCP Tools for Dataverse form operations
+	/// Model Context Protocol (MCP) server tools for comprehensive Dataverse form operations.
+	/// This class provides a suite of tools for retrieving, validating, updating, and managing 
+	/// Dataverse system forms through MCP server integration.
 	/// </summary>
+	/// <remarks>
+	/// The DataverseFormTools class is designed to work as part of an MCP server ecosystem,
+	/// providing AI-powered assistance for Dataverse form engineering tasks. All methods are
+	/// decorated with McpServerTool attributes to enable automatic discovery and execution
+	/// by MCP-compatible clients.
+	/// 
+	/// Key capabilities include:
+	/// - Form retrieval with intelligent form selection
+	/// - FormXML schema validation against Dataverse standards
+	/// - Form updates with automatic publishing
+	/// - Comprehensive form inventory and reporting
+	/// 
+	/// This tool suite is particularly valuable for:
+	/// - Power Platform developers working with form customizations
+	/// - System administrators managing form compliance
+	/// - Solution architects designing form structures
+	/// - DevOps teams automating form deployment processes
+	/// </remarks>
 	[McpServerToolType]
 	public class DataverseFormTools
 	{
+		/// <summary>
+		/// Initializes a new instance of the DataverseFormTools class.
+		/// This constructor is protected to enforce the static nature of the MCP server tools.
+		/// </summary>
 		protected DataverseFormTools() { }
-
-
-
 
 		/// <summary>
 		/// Updates a Dataverse form definition with new XML and publishes the changes to the environment.
@@ -31,10 +50,10 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 		/// to make them available to users.
 		/// </summary>
 		/// <param name="logger">Logger instance for tracking operations and debugging</param>
+		/// <param name="validator">Service for validating FormXML against the Dataverse schema before updates</param>
 		/// <param name="clientProvider">Service provider for authenticating and connecting to Dataverse</param>
 		/// <param name="formService">Service for performing form-related operations</param>
 		/// <param name="publishXmlBuilder">Builder service for creating publish XML requests</param>
-		/// <param name="entityLogicalName">The logical name of the Dataverse table (e.g., 'account', 'contact')</param>
 		/// <param name="formId">The unique identifier (GUID) of the form to update</param>
 		/// <param name="formXml">The new XML definition for the form, must be valid FormXML</param>
 		/// <returns>
@@ -46,14 +65,26 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 		/// <exception cref="InvalidOperationException">Thrown when the form with specified ID is not found</exception>
 		/// <remarks>
 		/// This method performs the following operations:
-		/// 1. Validates the formId parameter as a valid GUID
-		/// 2. Authenticates to the Dataverse environment
-		/// 3. Retrieves the existing form by ID
-		/// 4. Updates the form's XML definition
-		/// 5. Publishes the changes to make them available to users
+		/// 1. Validates the formXml parameter against the FormXML schema using the validator service
+		/// 2. Authenticates to the Dataverse environment using the client provider
+		/// 3. Retrieves the existing form by ID to ensure it exists and get table information
+		/// 4. Updates the form's XML definition with the provided FormXML
+		/// 5. Publishes the changes to the specific table to make them available to users
 		/// 
-		/// Important: Always validate the formXml against the FormXML schema before calling this method
-		/// to ensure the XML is well-formed and compliant with Dataverse requirements.
+		/// **Important Notes:**
+		/// - The method includes built-in FormXML schema validation to prevent invalid updates
+		/// - Publishing is automatically performed for the affected table after the update
+		/// - The operation is marked as destructive and idempotent in the MCP server configuration
+		/// - All operations are logged with appropriate trace, error, and success messages
+		/// 
+		/// **Validation Process:**
+		/// The FormXML validation uses the embedded Dataverse FormXML schema definition to ensure
+		/// that the provided XML will be accepted by the Dataverse platform. If validation fails,
+		/// the method returns detailed error information without attempting the update.
+		/// 
+		/// **Publishing Behavior:**
+		/// After a successful form update, the method automatically publishes changes for the
+		/// associated table to ensure the updated form is immediately available to users.
 		/// 
 		/// The method supports all form types including Main, QuickCreate, QuickView, Card, and others
 		/// as defined in the systemform_type enumeration.
@@ -62,42 +93,69 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 		/// <code>
 		/// var result = await UpdateFormDefinition(
 		///     logger,
+		///     validator,
 		///     clientProvider,
 		///     formService,
 		///     publishXmlBuilder,
-		///     "account",
-		///     "12345678-1234-1234-1234-123456789012",
+		///     Guid.Parse("12345678-1234-1234-1234-123456789012"),
 		///     "&lt;form&gt;...&lt;/form&gt;"
 		/// );
+		/// 
+		/// if (result.StartsWith("✅"))
+		/// {
+		///     // Update successful
+		///     Console.WriteLine("Form updated successfully!");
+		/// }
+		/// else
+		/// {
+		///     // Handle error
+		///     Console.WriteLine($"Update failed: {result}");
+		/// }
 		/// </code>
 		/// </example>
-		[McpServerTool, 
-		Description(@"Updates a Dataverse form definition with new XML and returns the ID of the updated or created form. 
+		/// <seealso cref="ValidateFormXmlAgainstSchema"/>
+		/// <seealso cref="GetFormDefinition"/>
+		[McpServerTool(
+			Name = "dataverse_form_update_formxml",
+			Destructive = true,
+			ReadOnly = false,
+			Idempotent = true
+		), 
+		Description(
+@"Updates a Dataverse form definition with new XML and returns the ID of the updated or created form. 
 Be sure to validate the formXml against it's schema definition before executing the update.
 ")]
 		public static async Task<string> UpdateFormDefinition(
 			ILogger<DataverseFormTools> logger,
+			IFormXmlValidator validator,
 			IDataverseClientProvider clientProvider,
 			IFormService formService,
 			IPublishXmlBuilder publishXmlBuilder,
-			[Description("Logical name of the Dataverse table")] string entityLogicalName,
-			[Description("Form ID (required)")] string formId,
+			[Description("Form ID (required)")] Guid formId,
 			[Description("Form XML")] string formXml
 			)
 		{
+			logger.LogTrace("{ToolName} called with parameters: FormId={FormId}, FormXml={FormXml}",
+				   nameof(UpdateFormDefinition),
+				   formId,
+				   formXml);
+
 			try
 			{
-				if (!Guid.TryParse(formId, out var parsedFormId))
+				var validationResult = validator.TryValidateFormXmlAgainstSchema(formXml);
+				if (!validationResult.IsValid)
 				{
-					logger.LogError("Invalid formId: {FormId}", formId);
-					return "❌ Invalid formId: " + formId;
+					logger.LogError("❌ Form XML validation failed with {ErrorCount} errors and {WarningCount} warnings. Run the ValidateFormXmlAgainstSchema command to get more details about the validation errors", 
+						validationResult.Count(x => x.Level == FormXmlValidationLevel.Error), 
+						validationResult.Count(x => x.Level == FormXmlValidationLevel.Warning));
+					return "❌ Form XML validation failed: " + string.Join(", ", validationResult);
 				}
 
 
-				logger.LogInformation("🔐 Authenticating to Dataverse");
+				logger.LogTrace("🔐 Authenticating to Dataverse");
 				var client = await clientProvider.GetDataverseClientAsync();
 
-				var form = await formService.GetFormByIdAsync(client, parsedFormId);
+				var form = await formService.GetFormByIdAsync(client, formId);
 				if (form == null)
 				{
 					logger.LogError("❌ No form found with ID: {FormId}", formId);
@@ -108,18 +166,18 @@ Be sure to validate the formXml against it's schema definition before executing 
 
 				form.FormXml = formXml;
 
-				logger.LogInformation("🔄 Updating form with ID: {FormId}", formId);
+				logger.LogTrace("🔄 Updating form with ID: {FormId}", formId);
 				await client.UpdateAsync(form);
 
 
-				logger.LogInformation("Publish all");
+				logger.LogTrace("Publish all");
 
 				publishXmlBuilder.AddTable(tableName);
 				var request = publishXmlBuilder.Build();
 
 				await client.ExecuteAsync(request);
 
-				logger.LogInformation("✅ Form updated successfully: {FormId}", formId);
+				logger.LogTrace("✅ Form updated successfully: {FormId}", formId);
 				return $"✅ Form updated successfully: {formId}";
 			}
 			catch (Exception ex)
@@ -129,17 +187,13 @@ Be sure to validate the formXml against it's schema definition before executing 
 			}
 		}
 
-
-
-
-
-
 		/// <summary>
 		/// Validates form XML against the Dataverse FormXML schema to ensure compliance and correctness.
 		/// This method performs comprehensive schema validation using the embedded XSD schema and reports
 		/// all validation errors, warnings, and provides helpful guidance for fixing issues.
 		/// </summary>
 		/// <param name="logger">Logger instance for tracking validation operations and results</param>
+		/// <param name="validator">Service that performs the actual FormXML validation against the schema</param>
 		/// <param name="formXml">The form XML content to validate against the FormXML schema</param>
 		/// <returns>
 		/// A validation result string containing:
@@ -153,20 +207,35 @@ Be sure to validate the formXml against it's schema definition before executing 
 		/// <exception cref="XmlException">Thrown when the XML is malformed or contains syntax errors</exception>
 		/// <exception cref="XmlSchemaException">Thrown when schema validation encounters critical errors</exception>
 		/// <remarks>
-		/// This method performs the following validation steps:
-		/// 1. Loads the embedded FormXML XSD schema from resources
-		/// 2. Creates an XML schema set for validation
-		/// 3. Configures XML reader settings for schema validation
-		/// 4. Reads through the entire XML document to trigger validation
-		/// 5. Collects and categorizes all validation events (errors/warnings)
-		/// 6. Formats results with line numbers and helpful guidance
+		/// This method serves as a comprehensive FormXML validation tool that should be used before
+		/// attempting any form updates to ensure the XML meets Dataverse requirements.
+		/// 
+		/// **Validation Process:**
+		/// 1. Uses the IFormXmlValidator service to validate against the embedded FormXML XSD schema
+		/// 2. Categorizes validation results into errors and warnings
+		/// 3. Formats results with helpful guidance and troubleshooting tips
+		/// 4. Provides detailed error information including line numbers when available
+		/// 
+		/// **Validation Categories:**
+		/// - **Errors**: Critical issues that will prevent the form from being saved in Dataverse
+		/// - **Warnings**: Non-critical issues or deprecated elements that may still work but should be addressed
+		/// - **Success**: Clean validation with no issues found
+		/// 
+		/// **Output Format:**
+		/// The method returns user-friendly formatted text with:
+		/// - Visual indicators (✅ for success, ❌ for errors, ⚠️ for warnings)
+		/// - Numbered lists of issues for easy reference
+		/// - Helpful tips section with common resolution strategies
+		/// - Summary statistics for quick assessment
+		/// 
+		/// **Best Practices:**
+		/// - Always validate FormXML before calling UpdateFormDefinition
+		/// - Address all errors before attempting form updates
+		/// - Consider addressing warnings for best practices compliance
+		/// - Use this tool during development cycles for early issue detection
 		/// 
 		/// The validation uses the official Dataverse FormXML schema definition to ensure
 		/// that the provided XML will be accepted by the Dataverse platform.
-		/// 
-		/// Validation errors indicate issues that will prevent the form from being saved,
-		/// while warnings indicate potential issues or deprecated elements that may still work
-		/// but should be addressed for best practices.
 		/// 
 		/// This method should be called before attempting to update a form using
 		/// <see cref="UpdateFormDefinition"/> to ensure the XML is valid and will not
@@ -174,141 +243,95 @@ Be sure to validate the formXml against it's schema definition before executing 
 		/// </remarks>
 		/// <example>
 		/// <code>
-		/// var validationResult = ValidateFormXmlAgainstSchema(logger, formXmlContent);
+		/// string formXmlContent = LoadFormXmlFromFile("account_form.xml");
+		/// var validationResult = ValidateFormXmlAgainstSchema(logger, validator, formXmlContent);
+		/// 
 		/// if (validationResult.Contains("✅"))
 		/// {
 		///     // XML is valid, safe to proceed with update
-		///     await UpdateFormDefinition(logger, clientProvider, formService, 
-		///         publishXmlBuilder, "account", formId, formXmlContent);
+		///     Console.WriteLine("FormXML is valid - ready for deployment");
+		///     await UpdateFormDefinition(logger, validator, clientProvider, formService, 
+		///         publishXmlBuilder, formId, formXmlContent);
 		/// }
 		/// else
 		/// {
 		///     // Handle validation errors
+		///     Console.WriteLine("Validation issues found:");
 		///     Console.WriteLine(validationResult);
 		/// }
 		/// </code>
 		/// </example>
 		/// <seealso cref="UpdateFormDefinition"/>
-		[McpServerTool, 
+		/// <seealso cref="IFormXmlValidator"/>
+		[McpServerTool(
+			Name = "dataverse_form_validate_formxml",
+			Destructive = false,
+			ReadOnly = true,
+			Idempotent = true
+		), 
 		Description("Validates form XML against the Dataverse FormXML schema. Returns validation results with any errors found or a success message.")]
 		public static string ValidateFormXmlAgainstSchema(
 			ILogger<DataverseFormTools> logger,
+			IFormXmlValidator validator,
 			[Description("Form XML to validate")] string formXml)
 		{
+			logger.LogTrace("{ToolName} called with parameters: FormXml={FormXml}",
+				   nameof(ValidateFormXmlAgainstSchema),
+				   formXml);
+
+
 			try
 			{
-				var schema = Encoding.UTF8.GetString(Properties.Resources.formxml);
-				if (string.IsNullOrEmpty(formXml))
-				{
-					logger.LogError("❌ Form XML is empty or null");
-					return "❌ Form XML is empty or null";
-				}
-
-				if (string.IsNullOrEmpty(schema))
-				{
-					logger.LogError("❌ Schema is empty or null");
-					return "❌ Schema is empty or null";
-				}
-
-				logger.LogInformation("🔍 Validating form XML against schema");
-
-				var validationErrors = new List<string>();
-				var validationWarnings = new List<string>();
-
-				// Create XML schema set
-				var schemaSet = new XmlSchemaSet();
-				
-				// Add the schema from resources
-				using (var schemaReader = new StringReader(schema))
-				using (var xmlSchemaReader = XmlReader.Create(schemaReader))
-				{
-					schemaSet.Add(null, xmlSchemaReader);
-				}
-
-				// Create XML reader settings with validation
-				var settings = new XmlReaderSettings
-				{
-					ValidationType = ValidationType.Schema,
-					Schemas = schemaSet
-				};
-
-				// Add validation event handler to collect errors and warnings
-				settings.ValidationEventHandler += (sender, e) =>
-				{
-					var message = $"Line {e.Exception?.LineNumber}, Position {e.Exception?.LinePosition}: {e.Message}";
-					
-					if (e.Severity == XmlSeverityType.Error)
-					{
-						validationErrors.Add(message);
-						logger.LogWarning("Validation Error: {Message}", message);
-					}
-					else if (e.Severity == XmlSeverityType.Warning)
-					{
-						validationWarnings.Add(message);
-						logger.LogWarning("Validation Warning: {Message}", message);
-					}
-				};
-
-				// Validate the XML
-				using (var formXmlReader = new StringReader(formXml))
-				using (var xmlReader = XmlReader.Create(formXmlReader, settings))
-				{
-					try
-					{
-						// Read through the entire document to trigger validation
-						while (xmlReader.Read()) { }
-					}
-					catch (XmlException xmlEx)
-					{
-						var message = $"XML Parsing Error at Line {xmlEx.LineNumber}, Position {xmlEx.LinePosition}: {xmlEx.Message}";
-						validationErrors.Add(message);
-						logger.LogError(xmlEx, "XML parsing error during validation");
-					}
-				}
+				var validationResult = validator.TryValidateFormXmlAgainstSchema(formXml);
 
 				// Format and return results
 				var result = new StringBuilder();
 				
-				if (validationErrors.Count == 0 && validationWarnings.Count == 0)
+				if (validationResult.IsValid && !validationResult.HasWarnings)
 				{
 					result.AppendLine("✅ Form XML validation successful!");
 					result.AppendLine("📋 The form XML is valid according to the Dataverse FormXML schema.");
-					logger.LogInformation("✅ Form XML validation successful");
+					logger.LogTrace("✅ Form XML validation successful");
+					return result.ToString();
 				}
-				else
+
+
+
+
+				result.AppendLine("❌ Form XML validation failed!");
+				result.AppendLine();
+					
+				var validationErrors = validationResult.Where(x => x.Level == FormXmlValidationLevel.Error).ToList();
+				if (validationErrors.Count > 0)
 				{
-					result.AppendLine("❌ Form XML validation failed!");
+					result.AppendLine($"🚨 **{validationErrors.Count} Validation Error(s):**");
+					for (int i = 0; i < validationErrors.Count; i++)
+					{
+						result.AppendLine($"   {i + 1}. {validationErrors[i]}");
+					}
 					result.AppendLine();
-					
-					if (validationErrors.Count > 0)
-					{
-						result.AppendLine($"🚨 **{validationErrors.Count} Validation Error(s):**");
-						for (int i = 0; i < validationErrors.Count; i++)
-						{
-							result.AppendLine($"   {i + 1}. {validationErrors[i]}");
-						}
-						result.AppendLine();
-					}
-
-					if (validationWarnings.Count > 0)
-					{
-						result.AppendLine($"⚠️ **{validationWarnings.Count} Validation Warning(s):**");
-						for (int i = 0; i < validationWarnings.Count; i++)
-						{
-							result.AppendLine($"   {i + 1}. {validationWarnings[i]}");
-						}
-						result.AppendLine();
-					}
-
-					result.AppendLine("💡 **Tips:**");
-					result.AppendLine("   • Check that all required attributes are present");
-					result.AppendLine("   • Verify that element names and structure match the schema");
-					result.AppendLine("   • Ensure that attribute values are within allowed ranges");
-					result.AppendLine("   • Make sure nested elements follow the correct hierarchy");
-					
-					logger.LogWarning("Form XML validation failed with {ErrorCount} errors and {WarningCount} warnings", 
-						validationErrors.Count, validationWarnings.Count);
 				}
+
+				var validationWarnings = validationResult.Where(x => x.Level == FormXmlValidationLevel.Error).ToList();
+				if (validationWarnings.Count > 0)
+				{
+					result.AppendLine($"⚠️ **{validationWarnings.Count} Validation Warning(s):**");
+					for (int i = 0; i < validationWarnings.Count; i++)
+					{
+						result.AppendLine($"   {i + 1}. {validationWarnings[i]}");
+					}
+					result.AppendLine();
+				}
+
+				result.AppendLine("💡 **Tips:**");
+				result.AppendLine("   • Check that all required attributes are present");
+				result.AppendLine("   • Verify that element names and structure match the schema");
+				result.AppendLine("   • Ensure that attribute values are within allowed ranges");
+				result.AppendLine("   • Make sure nested elements follow the correct hierarchy");
+					
+				logger.LogWarning("Form XML validation failed with {ErrorCount} errors and {WarningCount} warnings", 
+					validationErrors.Count, validationWarnings.Count);
+				
 
 				return result.ToString();
 			}
@@ -319,26 +342,128 @@ Be sure to validate the formXml against it's schema definition before executing 
 			}
 		}
 
-
-
-
-
-
-
 		/// <summary>
-		/// Retrieves the definition of a Dataverse form in XML or JSON format
+		/// Retrieves the definition of a Dataverse form in XML or JSON format with intelligent form selection capabilities.
+		/// This method provides flexible form retrieval with smart defaults, automatic Main form detection, and comprehensive
+		/// output formatting options for both human-readable and programmatic use cases.
 		/// </summary>
-		/// <param name="clientProvider">Dataverse authentication service</param>
-		/// <param name="formService">Service for form operations</param>
-		/// <param name="logger">Logger for diagnostics</param>
-		/// <param name="dataverseUrl">Dataverse environment URL (e.g.: https://yourorg.crm.dynamics.com)</param>
-		/// <param name="entityLogicalName">Logical name of the Dataverse table</param>
-		/// <param name="formName">Specific form name (optional)</param>
-		/// <param name="formType">Form type: Main, QuickCreate, QuickView, Card, etc. (optional)</param>
-		/// <param name="outputFormat">Output format: 'xml' or 'json' (default: xml)</param>
-		/// <param name="includeInactive">Include inactive forms (default: false)</param>
-		/// <returns>Form definition in the requested format</returns>
-		[McpServerTool, Description("Retrieves the XML or JSON definition of a Dataverse form. If you only specify the table name, it automatically searches for the Main form. If it finds multiple Main forms, it returns the list to allow selection. You can specify formName and/or formType to be more precise.")]
+		/// <param name="logger">Logger instance for tracking form retrieval operations and debugging information</param>
+		/// <param name="clientProvider">Service provider for authenticating and establishing secure connections to Dataverse</param>
+		/// <param name="formService">Service for performing form-related operations including form queries and metadata retrieval</param>
+		/// <param name="entityLogicalName">
+		/// The logical name of the Dataverse table (e.g., 'account', 'contact', 'opportunity').
+		/// This parameter is required and case-sensitive.
+		/// </param>
+		/// <param name="formName">
+		/// Optional specific form name to retrieve. If not provided, the method uses intelligent form selection.
+		/// When combined with formType, provides precise form targeting.
+		/// </param>
+		/// <param name="formType">
+		/// Optional form type filter (e.g., 'Main', 'QuickCreate', 'QuickView', 'Card').
+		/// Must match values from the systemform_type enumeration. Case-insensitive matching is supported.
+		/// </param>
+		/// <param name="outputFormat">
+		/// Output format specification: 'xml' for human-readable XML format, 'json' for structured JSON format.
+		/// Defaults to 'xml'. Case-insensitive matching is used.
+		/// </param>
+		/// <returns>
+		/// A task that represents the asynchronous operation. The task result contains:
+		/// - **XML Format**: Human-readable form definition with metadata and complete FormXML
+		/// - **JSON Format**: Structured JSON with form metadata and dynamically converted XML-to-JSON structure
+		/// - **Multiple Forms Found**: Interactive selection list when smart search finds multiple Main forms
+		/// - **Error Message**: Detailed error information if retrieval fails or no forms are found
+		/// </returns>
+		/// <exception cref="ArgumentException">
+		/// Thrown when entityLogicalName is null, empty, or when formType contains an invalid value
+		/// that doesn't match the systemform_type enumeration
+		/// </exception>
+		/// <exception cref="UnauthorizedAccessException">Thrown when authentication to Dataverse fails</exception>
+		/// <exception cref="InvalidOperationException">Thrown when the specified table does not exist in the environment</exception>
+		/// <remarks>
+		/// This method implements intelligent form selection logic to provide the best user experience:
+		/// 
+		/// **Smart Main Form Detection:**
+		/// When neither formName nor formType is specified, the method automatically searches for Main forms
+		/// for the specified table. This "smart behavior" covers the most common use case.
+		/// 
+		/// **Multiple Form Handling:**
+		/// If the smart search finds multiple Main forms, the method returns a formatted selection list
+		/// with form details and usage examples, allowing users to make informed choices.
+		/// 
+		/// **Precise Form Targeting:**
+		/// Users can specify formName and/or formType for exact form retrieval when they know
+		/// the specific form they need.
+		/// 
+		/// **Output Format Options:**
+		/// 
+		/// **XML Format Features:**
+		/// - User-friendly display with emoji indicators
+		/// - Complete form metadata (ID, type, default status, description)
+		/// - Full FormXML definition in markdown code blocks
+		/// - Visual separators for multiple forms
+		/// - Optimized for console output and documentation
+		/// 
+		/// **JSON Format Features:**
+		/// - Structured data suitable for programmatic processing
+		/// - Dynamic XML-to-JSON conversion of FormXML structure
+		/// - Preserved original XML for reference
+		/// - Entity metadata and form count information
+		/// - API-friendly format for integration scenarios
+		/// 
+		/// **Error Handling:**
+		/// The method provides comprehensive error handling with informative messages:
+		/// - Clear indication when no forms are found with applied filters
+		/// - Validation of form type parameters against valid enumeration values
+		/// - Detailed exception information for troubleshooting
+		/// 
+		/// **Performance Considerations:**
+		/// - Single authentication per method call
+		/// - Efficient form queries with appropriate filtering
+		/// - Lazy evaluation of output formatting
+		/// - Optimized for both single and batch form operations
+		/// 
+		/// **Logging Integration:**
+		/// All operations are comprehensively logged with different levels:
+		/// - Trace: Parameter values and operation flow
+		/// - Information: Successful operations and form discovery
+		/// - Warning: Unusual conditions or multiple form scenarios
+		/// - Error: Failures and exception details
+		/// </remarks>
+		/// <example>
+		/// <code>
+		/// // Get the Main form for Account table (smart detection)
+		/// var accountMainForm = await GetFormDefinition(
+		///     logger, clientProvider, formService, "account");
+		/// 
+		/// // Get a specific form by name
+		/// var specificForm = await GetFormDefinition(
+		///     logger, clientProvider, formService, "contact", "Contact Information");
+		/// 
+		/// // Get QuickCreate forms in JSON format
+		/// var quickCreateForms = await GetFormDefinition(
+		///     logger, clientProvider, formService, "opportunity", 
+		///     formType: "QuickCreate", outputFormat: "json");
+		/// 
+		/// // Parse JSON result for programmatic use
+		/// if (quickCreateForms.StartsWith("{"))
+		/// {
+		///     var formData = JsonConvert.DeserializeObject(quickCreateForms);
+		///     // Process structured form data
+		/// }
+		/// </code>
+		/// </example>
+		/// <seealso cref="UpdateFormDefinition"/>
+		/// <seealso cref="GetFormListByTableSchemaName"/>
+		/// <seealso cref="systemform_type"/>
+		/// <seealso cref="SystemFormExtensions.FormatJsonOutput"/>
+		/// <seealso cref="SystemFormExtensions.FormatXmlOutput"/>
+		[McpServerTool(
+			Name = "dataverse_form_retrieve_formxml",
+			Destructive = false,
+			ReadOnly = true,
+			Idempotent = true
+		), 
+		Description("Retrieves the XML or JSON definition of a Dataverse form. If you only specify the table name, it automatically searches for the Main form. If it finds multiple Main forms, it returns the list to allow selection. You can specify formName and/or formType to be more precise.")]
 		public static async Task<string> GetFormDefinition(
 			ILogger<DataverseFormTools> logger,
 			IDataverseClientProvider clientProvider,
@@ -348,9 +473,15 @@ Be sure to validate the formXml against it's schema definition before executing 
 			[Description("Form type: Main, QuickCreate, QuickView, Card, etc. (optional)")] string? formType = null,
 			[Description("Output format: 'xml' or 'json' (default: xml)")] string outputFormat = "xml")
 		{
+			logger.LogTrace("{ToolName} called with parameters: entityLogicalName={EntityLogicalName}, formName={FormName}, formType={FormType}, outputFormat={OutputFormat}",
+				   nameof(GetFormDefinition),
+				   entityLogicalName,
+				   formName,
+				   formType,
+				   outputFormat);
 			try
 			{
-				logger.LogInformation("🔍 Retrieving forms for table: {EntityName}", entityLogicalName);
+				logger.LogTrace("🔍 Retrieving forms for table: {EntityName}", entityLogicalName);
 
 				if (string.IsNullOrEmpty(entityLogicalName))
 				{
@@ -358,7 +489,7 @@ Be sure to validate the formXml against it's schema definition before executing 
 				}
 
 				// Authentication
-				logger.LogInformation("🔐 Authenticating to Dataverse");
+				logger.LogTrace("🔐 Authenticating to Dataverse");
 				var client = await clientProvider.GetDataverseClientAsync();
 
 				// Parse form type if specified
@@ -381,11 +512,11 @@ Be sure to validate the formXml against it's schema definition before executing 
 				if (isSmartMainFormSearch)
 				{
 					parsedFormType = systemform_type.Main;
-					logger.LogInformation("🎯 No form specified, automatic search for Main form for '{EntityName}'", entityLogicalName);
+					logger.LogTrace("🎯 No form specified, automatic search for Main form for '{EntityName}'", entityLogicalName);
 				}
 
 				// Retrieve forms
-				logger.LogInformation("📋 Retrieving forms for table: {EntityName}", entityLogicalName);
+				logger.LogTrace("📋 Retrieving forms for table: {EntityName}", entityLogicalName);
 				var forms = await formService.GetFormsAsync(
 					client,
 					entityLogicalName,
@@ -407,14 +538,14 @@ Be sure to validate the formXml against it's schema definition before executing 
 				// return the list to allow selection
 				if (isSmartMainFormSearch && forms.Count > 1)
 				{
-					return FormatMultipleFormsSelectionOutput(forms, entityLogicalName);
+					return forms.FormatMultipleFormsSelectionOutput(entityLogicalName);
 				}
 
 				// If it's a smart search and we found exactly one Main form,
 				// add an informative message
 				if (isSmartMainFormSearch && forms.Count == 1)
 				{
-					logger.LogInformation("✅ Found unique Main form for '{EntityName}': {FormName}", entityLogicalName, forms[0].Name);
+					logger.LogTrace("✅ Found unique Main form for '{EntityName}': {FormName}", entityLogicalName, forms[0].Name);
 				}
 
 				// Format output
@@ -422,11 +553,11 @@ Be sure to validate the formXml against it's schema definition before executing 
 
 				if (format == "json")
 				{
-					return FormatJsonOutput(forms, entityLogicalName);
+					return forms.FormatJsonOutput(entityLogicalName);
 				}
 				else
 				{
-					return FormatXmlOutput(forms, entityLogicalName);
+					return forms.FormatXmlOutput(entityLogicalName);
 				}
 			}
 			catch (Exception ex)
@@ -435,12 +566,6 @@ Be sure to validate the formXml against it's schema definition before executing 
 				return $"❌ Error: {ex.Message}";
 			}
 		}
-
-
-
-
-
-
 
 		/// <summary>
 		/// Retrieves a comprehensive list of all forms for a specified Dataverse table with detailed metadata.
@@ -508,7 +633,12 @@ Be sure to validate the formXml against it's schema definition before executing 
 		/// <seealso cref="GetFormDefinition"/>
 		/// <seealso cref="UpdateFormDefinition"/>
 		/// <seealso cref="systemform_type"/>
-		[McpServerTool, 
+		[McpServerTool(
+			Name = "dataverse_form_retrieve_list_by_table",
+			Destructive = false,
+			ReadOnly = true,
+			Idempotent = true
+		), 
 		Description("Retrieves the list of forms for a given Dataverse table, and returns the details such as Id, Name, Type, Description, ad if it's default or not")]
 		public static async Task<string> GetFormListByTableSchemaName(
 			ILogger<DataverseFormTools> logger,
@@ -518,11 +648,15 @@ Be sure to validate the formXml against it's schema definition before executing 
 			[Description("The logical name of the Dataverse table")] string entityLogicalName,
 			[Description("How do you want the output to be returned (Formatted or Json)")] string outputType)
 		{
+			logger.LogTrace("{ToolName} called with parameters: entityLogicalName={EntityLogicalName}, outputType={OutputType}",
+				   nameof(GetFormListByTableSchemaName),
+				   entityLogicalName,
+				   outputType);
 			try
 			{
 				var client = await clientProvider.GetDataverseClientAsync();
 
-				logger.LogInformation("🔍 Retrieving forms for table: {EntityName}", entityLogicalName);
+				logger.LogTrace("🔍 Retrieving forms for table: {EntityName}", entityLogicalName);
 
 				var context = new DataverseContext(client);
 
@@ -560,205 +694,30 @@ Be sure to validate the formXml against it's schema definition before executing 
 			}
 		}
 
-
-
-
+		/// <summary>
+		/// Formats a collection of SystemForm objects into structured JSON output using extension methods.
+		/// This is a helper method that delegates to the SystemFormExtensions.FormatJsonOutput method.
+		/// </summary>
+		/// <param name="forms">The collection of SystemForm objects to format</param>
+		/// <param name="entityLogicalName">The logical name of the entity these forms belong to</param>
+		/// <returns>Formatted JSON string with form metadata and structure</returns>
+		/// <seealso cref="SystemFormExtensions.FormatJsonOutput"/>
 		private static string FormatJsonOutput(List<SystemForm> forms, string entityLogicalName)
 		{
-			var result = new
-			{
-				entity_logical_name = entityLogicalName,
-				total_forms = forms.Count,
-				forms = forms.Select(form => new
-				{
-					form_id = form.Id,
-					name = form.Name,
-					type = form.Type.ToString(),
-					description = form.Description,
-					is_default = form.IsDefault,
-
-					// Dynamic conversion of form XML to JSON
-					form_structure_dynamic = ConvertXmlToJsonElement(form.FormXml),
-
-					// We also keep the original XML for reference
-					form_xml = !string.IsNullOrEmpty(form.FormXml) ? form.FormXml : null
-				})
-			};
-
-			return JsonConvert.SerializeObject(result, Newtonsoft.Json.Formatting.Indented);
+			return forms.FormatJsonOutput(entityLogicalName);
 		}
 
+		/// <summary>
+		/// Formats a collection of SystemForm objects into human-readable XML output using extension methods.
+		/// This is a helper method that delegates to the SystemFormExtensions.FormatXmlOutput method.
+		/// </summary>
+		/// <param name="forms">The collection of SystemForm objects to format</param>
+		/// <param name="entityLogicalName">The logical name of the entity these forms belong to</param>
+		/// <returns>Formatted string with form details and XML definitions</returns>
+		/// <seealso cref="SystemFormExtensions.FormatXmlOutput"/>
 		private static string FormatXmlOutput(List<SystemForm> forms, string entityLogicalName)
 		{
-			var output = new System.Text.StringBuilder();
-			output.AppendLine($"✅ Found {forms.Count} forms for table '{entityLogicalName}' (XML format):");
-			output.AppendLine();
-
-			foreach (var form in forms)
-			{
-				output.AppendLine($"📋 Form: {form.Name}");
-				output.AppendLine($"   ID: {form.Id}");
-				output.AppendLine($"   Type: {form.Type}");
-				output.AppendLine($"   Default: {form.IsDefault}");
-
-				if (!string.IsNullOrEmpty(form.Description))
-				{
-					output.AppendLine($"   Description: {form.Description}");
-				}
-
-				output.AppendLine();
-				output.AppendLine("📄 XML Definition:");
-				output.AppendLine("```xml");
-				output.AppendLine(form.FormXml);
-				output.AppendLine("```");
-				output.AppendLine();
-
-				output.AppendLine("".PadLeft(80, '-'));
-				output.AppendLine();
-			}
-
-			return output.ToString();
-		}
-
-
-
-
-
-
-		/// <summary>
-		/// Dynamically converts form XML to a JsonElement
-		/// </summary>
-		/// <param name="xmlContent">XML content to convert</param>
-		/// <returns>JsonElement representing the XML structure</returns>
-		private static JsonElement ConvertXmlToJsonElement(string? xmlContent)
-		{
-			if (string.IsNullOrEmpty(xmlContent))
-				return JsonDocument.Parse("{}").RootElement;
-
-			try
-			{
-				// Parse XML
-				var xmlDoc = XDocument.Parse(xmlContent);
-
-				// Convert to dynamic Dictionary
-				var dynamicObj = XmlToDynamicDictionary(xmlDoc.Root);
-
-				// Serialize to JSON and then parse as JsonElement
-				var jsonString = JsonConvert.SerializeObject(dynamicObj, Newtonsoft.Json.Formatting.Indented);
-				return JsonDocument.Parse(jsonString).RootElement;
-			}
-			catch (Exception)
-			{
-				// In case of error, return an empty object with the original XML
-				var errorObj = new Dictionary<string, object>
-				{
-					["error"] = "Error during XML conversion",
-					["original_xml"] = xmlContent ?? ""
-				};
-				var errorJson = JsonConvert.SerializeObject(errorObj, Newtonsoft.Json.Formatting.Indented);
-				return JsonDocument.Parse(errorJson).RootElement;
-			}
-		}
-
-		/// <summary>
-		/// Recursively converts an XElement to a Dictionary for JSON serialization
-		/// </summary>
-		/// <param name="element">XML element to convert</param>
-		/// <returns>Dictionary representing the XML element</returns>
-		private static Dictionary<string, object> XmlToDynamicDictionary(XElement? element)
-		{
-			var result = new Dictionary<string, object>();
-
-			if (element == null) return result;
-
-			// Handle XML attributes (@ prefix to distinguish them from elements)
-			foreach (var attr in element.Attributes())
-			{
-				result[$"@{attr.Name.LocalName}"] = attr.Value;
-			}
-
-			// Handle child elements
-			var childGroups = element.Elements().GroupBy(e => e.Name.LocalName);
-
-			foreach (var group in childGroups)
-			{
-				if (group.Count() == 1)
-				{
-					// Single element
-					var single = group.First();
-					if (single.HasElements || single.Attributes().Any())
-					{
-						// Has children or attributes -> complex object
-						result[group.Key] = XmlToDynamicDictionary(single);
-					}
-					else
-					{
-						// Text only -> simple value
-						result[group.Key] = single.Value;
-					}
-				}
-				else
-				{
-					// Multiple elements -> array
-					result[group.Key] = group.Select(e =>
-						e.HasElements || e.Attributes().Any()
-							? (object)XmlToDynamicDictionary(e)
-							: e.Value
-					).ToArray();
-				}
-			}
-
-			// If the element has only text and no attributes/children, 
-			// add text as a special property
-			if (!result.Any() && !string.IsNullOrEmpty(element.Value))
-			{
-				result["#text"] = element.Value;
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// Formats the output when multiple Main forms are found, allowing the user to choose
-		/// </summary>
-		/// <param name="forms">List of found forms</param>
-		/// <param name="entityLogicalName">Logical name of the table</param>
-		/// <returns>Formatted message with the list of available forms</returns>
-		private static string FormatMultipleFormsSelectionOutput(List<SystemForm> forms, string entityLogicalName)
-		{
-			var output = new System.Text.StringBuilder();
-			output.AppendLine($"🔍 Found {forms.Count} forms for table '{entityLogicalName}':");
-			output.AppendLine();
-			output.AppendLine("📋 **AVAILABLE FORMS:**");
-
-			for (int i = 0; i < forms.Count; i++)
-			{
-				var form = forms[i];
-				output.AppendLine($"   {i + 1}. **{form.Name}**");
-				output.AppendLine($"      • ID: {form.Id}");
-				output.AppendLine($"      • Default: {(form.IsDefault.GetValueOrDefault() ? "✅ Yes" : "❌ No")}");
-
-				if (!string.IsNullOrEmpty(form.Description))
-				{
-					output.AppendLine($"      • Description: {form.Description}");
-				}
-				output.AppendLine();
-			}
-
-			output.AppendLine("💡 **TO SELECT A SPECIFIC FORM:**");
-			output.AppendLine($"   Call again the tool specifying argument 'formName' with one of the following values:");
-
-			foreach (var form in forms)
-			{
-				output.AppendLine($"   • formName: \"{form.Name}\"");
-			}
-
-			output.AppendLine();
-			output.AppendLine("📝 **EXAMPLE:**");
-			output.AppendLine($"   GetFormDefinition(entityLogicalName=\"{entityLogicalName}\", formName=\"{forms[0].Name}\")");
-
-			return output.ToString();
+			return forms.FormatXmlOutput(entityLogicalName);
 		}
 	}
-
 }

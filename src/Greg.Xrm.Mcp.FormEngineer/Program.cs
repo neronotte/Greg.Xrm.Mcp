@@ -2,8 +2,6 @@
 using Greg.Xrm.Mcp.FormEngineer.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 using System.Reflection;
 
 namespace Greg.Xrm.Mcp.FormEngineer
@@ -12,32 +10,38 @@ namespace Greg.Xrm.Mcp.FormEngineer
 	{
 		private static async Task Main(string[] args)
 		{
-			var builder = Host.CreateApplicationBuilder(args);
+			try
+			{
+				var builder = Host.CreateApplicationBuilder(args);
 
-			builder.Logging.ClearProviders();
-			builder.Logging.AddNLog(Path.Combine(Assembly.GetExecutingAssembly().Location, "NLog.config"));
-
-			/****************************************************************************
-			 * Registering services
-			 ****************************************************************************/
-			builder.Services.AddTransient<IFormService, FormService>();
-
-
-			builder.InitializeArguments()
-				.InitializeFramework()
-				.InitializeStdioMcpServer(Assembly.GetExecutingAssembly());
+				/****************************************************************************
+				 * Registering services
+				 ****************************************************************************/
+				builder.Services.AddTransient<IFormService, FormService>();
+				builder.Services.AddTransient<IFormXmlValidator, FormXmlValidator>();
 
 
+				builder
+					.InitializeFramework()
+					.InitializeStdioMcpServer(Assembly.GetExecutingAssembly());
 
-			var host = builder.Build();
 
-			await host.RunAsync();
+
+				var host = builder.Build();
+
+				await host.RunAsync();
 
 #if DEBUG
-			Console.WriteLine();
-			Console.WriteLine("Press any key to exit...");
-			Console.ReadKey(true);
+				Console.WriteLine();
+				Console.WriteLine("Press any key to exit...");
+				Console.ReadKey(true);
 #endif
+			}
+			catch (Exception ex)
+			{
+				await Console.Error.WriteLineAsync($"Fatal error: {ex.Message}");
+				await Console.Error.WriteLineAsync(ex.ToString());
+			}
 		}
 	}
 }
