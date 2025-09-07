@@ -5,6 +5,7 @@
 [![.NET 9](https://img.shields.io/badge/.NET-9-blue.svg)](https://dotnet.microsoft.com/download/dotnet/9.0)
 [![License](https://img.shields.io/github/license/neronotte/Greg.Xrm.Mcp)](https://github.com/neronotte/Greg.Xrm.Mcp/blob/main/LICENSE)
 [![GitHub Issues](https://img.shields.io/github/issues/neronotte/Greg.Xrm.Mcp)](https://github.com/neronotte/Greg.Xrm.Mcp/issues)
+[![Build and Release](https://github.com/neronotte/Greg.Xrm.Mcp/actions/workflows/build-and-release.yml/badge.svg?branch=main)](https://github.com/neronotte/Greg.Xrm.Mcp/actions/workflows/build-and-release.yml)
 
 ---
 
