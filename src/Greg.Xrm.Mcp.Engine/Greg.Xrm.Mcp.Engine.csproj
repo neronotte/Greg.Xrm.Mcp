@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Greg.Xrm.Mcp</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Fetch.xsd">
+		  <SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\FilterXml.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\FormXml.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\LayoutXml.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\RibbonCore.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\RibbonTypes.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\RibbonWSS.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Model\Messages\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
+	  <PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Greg.Xrm.Mcp.Core\Greg.Xrm.Mcp.Core.csproj" />
+	</ItemGroup>
+
+</Project>

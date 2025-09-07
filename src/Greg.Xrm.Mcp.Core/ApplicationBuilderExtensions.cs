@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ModelContextProtocol.Server;
 using Serilog;
 using System.Reflection;
 
@@ -46,7 +45,6 @@ namespace Greg.Xrm.Mcp.Core
 			}
 
 
-			builder.Services.AddSingleton<IDataverseClientProvider, DataverseClientProvider>();
 			builder.Services.AddTransient<IPublishXmlBuilder, PublishXmlBuilder>();
 			
 			builder.Services.AddLogging(loggingBuilder =>
@@ -92,10 +90,30 @@ namespace Greg.Xrm.Mcp.Core
 
 
 
-		public static IMcpServerBuilder InitializeStdioMcpServer(this IHostApplicationBuilder builder, params Assembly[] assemblies)
+		public static IMcpServerBuilder InitializeStdioMcpServer(this IServiceCollection services, params Assembly[] assemblies)
 		{
-			var mcpServerBuilder = builder.Services.AddMcpServer()
+			services.AddSingleton<IDataverseClientProvider, DataverseClientProviderFromArguments>();
+
+			var mcpServerBuilder = services.AddMcpServer()
 				.WithStdioServerTransport();
+
+			foreach (var assembly in assemblies)
+			{
+				mcpServerBuilder.WithToolsFromAssembly(assembly)
+					.WithPromptsFromAssembly(assembly)
+					.WithResourcesFromAssembly(assembly);
+			}
+
+			return mcpServerBuilder;
+		}
+
+		public static IMcpServerBuilder InitializeSseMcpServer(this IServiceCollection services, params Assembly[] assemblies)
+		{
+			services.AddSingleton<IDataverseClientProvider, DataverseClientProviderFromHttpHeader>();
+
+
+			var mcpServerBuilder = services.AddMcpServer()
+				.WithHttpTransport();
 
 			foreach (var assembly in assemblies)
 			{

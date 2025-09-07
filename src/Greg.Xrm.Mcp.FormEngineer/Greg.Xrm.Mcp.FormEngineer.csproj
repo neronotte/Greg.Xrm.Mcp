@@ -20,52 +20,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\FormXml.xsd" />
-	  <None Remove="Resources\LayoutXml.xsd" />
-	  <None Remove="Resources\RibbonCore.xsd" />
-	  <None Remove="Resources\RibbonTypes.xsd" />
-	  <None Remove="Resources\RibbonWSS.xsd" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="Resources\FormXml.xsd">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	    <SubType>Designer</SubType>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="Resources\FilterXml.xsd">
-	    <SubType>Designer</SubType>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="Resources\RibbonCore.xsd">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	    <SubType>Designer</SubType>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="Resources\RibbonTypes.xsd">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	    <SubType>Designer</SubType>
-	  </EmbeddedResource>
-		<EmbeddedResource Include="Resources\RibbonWSS.xsd">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-			<SubType>Designer</SubType>
-		</EmbeddedResource>
-		<EmbeddedResource Include="Resources\LayoutXml.xsd">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-			<SubType>Designer</SubType>
-		</EmbeddedResource>
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.7" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.7" />
-		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.9" />
-		<PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.3" />
+		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
+		<PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.4" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Greg.Xrm.Mcp.Core\Greg.Xrm.Mcp.Core.csproj" />
+		<ProjectReference Include="..\Greg.Xrm.Mcp.Engine\Greg.Xrm.Mcp.Engine.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,10 +46,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Model\Messages\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Include="..\..\Logo_80.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
@@ -90,18 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Update="Properties\Resources.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
+	  <Folder Include="Properties\" />
 	</ItemGroup>
 
 </Project>

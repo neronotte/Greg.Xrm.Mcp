@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Greg.Xrm.Mcp.FormEngineer.SseServer": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:54443;http://localhost:54444"
+    }
+  }
+}

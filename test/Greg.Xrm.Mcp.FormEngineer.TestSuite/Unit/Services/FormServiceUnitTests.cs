@@ -158,7 +158,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.TestSuite.Unit.Services
 					["formid"] = form.Id,
 					["name"] = form.Name,
 					["objecttypecode"] = form.ObjectTypeCode,
-					["type"] = new OptionSetValue((int)form.Type),
+					["type"] = new OptionSetValue((int)form.Type!),
 					["description"] = form.Description,
 					["isdefault"] = form.IsDefault,
 					["formxml"] = form.FormXml

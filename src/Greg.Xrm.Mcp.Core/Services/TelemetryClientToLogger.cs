@@ -349,15 +349,14 @@ namespace Greg.Xrm.Mcp.Core.Services
 
 		private sealed class OperationHolderFake<T> : IOperationHolder<T> where T : OperationTelemetry, new()
 		{
-			private ILogger? _logger;
 			private IDisposable? _scope;
 			private bool _disposed;
 
 			public OperationHolderFake(ILogger logger, T operationTelemetry)
 			{
-				_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+				if (logger == null) throw new ArgumentNullException(nameof(logger));
 				Telemetry = operationTelemetry;
-				_scope = _logger.BeginScope("TELEMETRY: Operation '{OperationName}' started", Telemetry.Name);
+				_scope = logger.BeginScope("TELEMETRY: Operation '{OperationName}' started", Telemetry.Name);
 			}
 
 			public T Telemetry { get; }
@@ -378,7 +377,6 @@ namespace Greg.Xrm.Mcp.Core.Services
 					// Dispose managed resources
 					_scope?.Dispose();
 					_scope = null;
-					_logger = null;
 				}
 
 				_disposed = true;

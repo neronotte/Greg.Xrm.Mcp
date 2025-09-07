@@ -1,8 +1,7 @@
 ﻿using Greg.Xrm.Mcp.Core;
-using Greg.Xrm.Mcp.FormEngineer.Services;
-using Microsoft.Extensions.DependencyInjection;
+using Greg.Xrm.Mcp.FormEngineer.Server.Tools;
+using Greg.Xrm.Mcp.Server.Tools.Forms;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
 
 namespace Greg.Xrm.Mcp.FormEngineer
 {
@@ -14,16 +13,9 @@ namespace Greg.Xrm.Mcp.FormEngineer
 			{
 				var builder = Host.CreateApplicationBuilder(args);
 
-				/****************************************************************************
-				 * Registering services
-				 ****************************************************************************/
-				builder.Services.AddTransient<IFormService, FormService>();
-				builder.Services.AddTransient<IFormXmlValidator, FormXmlValidator>();
-
-
-				builder
-					.InitializeFramework()
-					.InitializeStdioMcpServer(Assembly.GetExecutingAssembly());
+				builder.Services.InitializeServices();
+				builder.InitializeFramework();
+				builder.Services.InitializeStdioMcpServer(typeof(DataverseMetadataTools).Assembly);
 
 
 

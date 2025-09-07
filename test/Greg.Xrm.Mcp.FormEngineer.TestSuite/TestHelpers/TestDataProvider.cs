@@ -98,6 +98,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.TestSuite.TestHelpers
 			public const string InvalidGuid = "Invalid formId";
 			public const string FormNotFound = "No form found with ID";
 			public const string EmptyXml = "empty or null";
+			public const string RootMissing = "Root element is missing";
 			public const string ValidationFailed = "Form XML validation failed";
 		}
 	}

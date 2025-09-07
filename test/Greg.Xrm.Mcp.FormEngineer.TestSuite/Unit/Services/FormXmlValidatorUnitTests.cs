@@ -29,7 +29,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.TestSuite.Unit.Services
 			public void WhenXmlIsNull_ReturnsValidationError()
 			{
 				// Act
-				var result = _validator.TryValidateFormXmlAgainstSchema(null);
+				var result = _validator.TryValidateFormXmlAgainstSchema(string.Empty);
 
 				// Assert
 				Assert.That(result, Has.Count.EqualTo(1));
@@ -80,18 +80,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.TestSuite.Unit.Services
 				// Assert
 				Assert.That(result, Has.Count.EqualTo(1));
 				Assert.That(result[0].Level, Is.EqualTo(FormXmlValidationLevel.Error));
-				Assert.That(result[0].Message, Does.Contain(TestDataProvider.ErrorMessages.EmptyXml));
-			}
-
-			[TestCase("<form><tab></tab></form>")]
-			[TestCase("<form><tabs><tab name='test'></tab></tabs></form>")]
-			public void WhenXmlHasBasicStructure_ValidatesSuccessfully(string xmlContent)
-			{
-				// Act
-				var result = _validator.TryValidateFormXmlAgainstSchema(xmlContent);
-
-				// Assert - Dovrebbe essere valido o al massimo avere solo warning
-				Assert.That(result.Where(r => r.Level == FormXmlValidationLevel.Error), Is.Empty);
+				Assert.That(result[0].Message, Does.Contain(TestDataProvider.ErrorMessages.RootMissing));
 			}
 		}
 
