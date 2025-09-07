@@ -33,7 +33,7 @@ If the FetchXML has an <order> node, the attribute specified in the node MUST be
 		public async Task<string> Execute(
 			IMcpServer mcpServer,
 			IPublishXmlBuilder publishXmlBuilder,
-			[Description("The unique identifier of the form to retrieve")] Guid viewId,
+			[Description("The unique identifier of the view to update")] Guid viewId,
 			[Description("The new layoutXML describing the structure of the columns of the view")] string newLayoutXml,
 
 			[Description(
@@ -105,7 +105,7 @@ attributes from the related entity must be add with an <attribute> node inside t
 			}
 			catch (Exception ex)
 			{
-				logger.LogError(ex, "❌ Error while retrieving forms: {Message}", ex.Message);
+				logger.LogError(ex, "❌ Error: {Message}", ex.Message);
 				return $"❌ Error: {ex.Message}";
 			}
 		}

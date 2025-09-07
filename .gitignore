@@ -417,4 +417,4 @@ test/.vscode/*
 *.msix
 *.msm
 *.msp
-/src/Greg.Xrm.Mcp.FormEngineer.SseServer/log20250907.txt
+**/log*.txt
