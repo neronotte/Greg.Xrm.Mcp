@@ -17,7 +17,7 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 	/// <summary>
 	/// Represents a source of entities bound to a Dataverse service. It tracks and manages changes made to the retrieved entities.
 	/// </summary>
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.11")]
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("Dataverse Model Builder", "2.0.0.15")]
 	public partial class DataverseContext : Microsoft.Xrm.Sdk.Client.OrganizationServiceContext
 	{
 		
@@ -28,7 +28,62 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 				base(service)
 		{
 		}
-
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.AppModule"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.AppModule> AppModuleSet
+		{
+			get
+			{
+				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.AppModule>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.AppModuleComponent"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.AppModuleComponent> AppModuleComponentSet
+		{
+			get
+			{
+				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.AppModuleComponent>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.AppModuleRoles"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.AppModuleRoles> AppModuleRolesSet
+		{
+			get
+			{
+				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.AppModuleRoles>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.SavedQuery"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.SavedQuery> SavedQuerySet
+		{
+			get
+			{
+				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.SavedQuery>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.SiteMap"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.SiteMap> SiteMapSet
+		{
+			get
+			{
+				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.SiteMap>();
+			}
+		}
+		
 		/// <summary>
 		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.SystemForm"/> entities.
 		/// </summary>
@@ -39,20 +94,9 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.SystemForm>();
 			}
 		}
-
+		
 		/// <summary>
-		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.SystemForm"/> entities.
-		/// </summary>
-		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.SavedQuery> SavedQuerySet
-		{
-			get
-			{
-				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.SavedQuery>();
-			}
-		}
-
-		/// <summary>
-		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.SystemForm"/> entities.
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.UserQuery"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.UserQuery> UserQuerySet
 		{

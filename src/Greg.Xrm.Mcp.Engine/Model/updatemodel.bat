@@ -1,0 +1,1 @@
+pac modelbuilder build -o . -sctx DataverseContext -stf builderSettings.json --logLevel All

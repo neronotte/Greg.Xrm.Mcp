@@ -9,11 +9,15 @@
   "entityTypesFolder": "Entities",
   "messagesTypesFolder": "Messages",
   "optionSetsTypesFolder": "OptionSets",
-  "entityNamesFilter": [
-    "systemform",
-    "savedquery",
-    "userquery"
-  ],
+    "entityNamesFilter": [
+        "systemform",
+        "savedquery",
+        "userquery",
+        "appmodule",
+        "appmodulecomponent",
+        "appmoduleroles",
+        "sitemap"
+    ],
   "emitEntityETC": false,
   "emitVirtualAttributes": false
 }
