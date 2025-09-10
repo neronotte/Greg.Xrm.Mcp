@@ -1,75 +1,85 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
-using System.Text;
+using System.Xml.Linq;
 
 namespace Greg.Xrm.Mcp.Core.Services
 {
 	public class PublishXmlBuilder : IPublishXmlBuilder
 	{
-		private readonly List<Guid> webResourceList = new();
-		private readonly List<string> tableList = new();
+		private readonly List<string> tableList = [];
+
+		private readonly XDocument xml;
+		private readonly XElement sitemaps;
+		private readonly XElement appmodules;
+		private readonly XElement webresources;
+		private readonly XElement tables;
+		private readonly XElement[] elements = [];
+
+
+		public PublishXmlBuilder()
+		{
+			this.xml = new XDocument(
+				new XElement("importexportxml")
+			);
+			this.sitemaps = new XElement("sitemaps");
+			this.appmodules = new XElement("appmodules");
+			this.webresources = new XElement("webresources");
+			this.tables = new XElement("tables");
+			this.elements = [this.sitemaps, this.appmodules, this.webresources, this.tables];
+
+			Clear();
+		}
+
 
 		public void Clear()
 		{
-			this.webResourceList.Clear();
-			this.tableList.Clear();
+			foreach (var element in this.elements)
+			{
+				element.RemoveNodes();
+			}
+		}
+
+		public void AddSiteMap(Guid id)
+		{
+			this.sitemaps.Add(new XElement("sitemap", id));
+		}
+
+		public void AddAppModule(Guid id)
+		{
+			this.appmodules.Add(new XElement("appmodule", id));
 		}
 
 		public void AddWebResource(Guid id)
 		{
-			if (!this.webResourceList.Contains(id))
-				this.webResourceList.Add(id);
+			this.webresources.Add(new XElement("webresource", id));
 		}
 
 
 		public void AddTable(string tableName)
 		{
 			if (!this.tableList.Contains(tableName))
+			{
 				this.tableList.Add(tableName);
+				this.tables.Add(new XElement("entity", tableName));
+			}
 		}
 
 
 		public PublishXmlRequest? Build()
 		{
-			if (this.webResourceList.Count == 0 && this.tableList.Count == 0)
-				return null;
-
-
-
-
-			var publishXml = new StringBuilder("<importexportxml>");
-
-			if (this.webResourceList.Count > 0)
+			foreach (var element in this.elements)
 			{
-				publishXml.AppendLine();
-				publishXml.AppendLine("  <webresources>");
-
-				foreach (var id in webResourceList)
+				if (element.HasElements)
 				{
-					publishXml.Append("    <webresource>").Append(id).Append("</webresource>").AppendLine();
+					xml.Root?.Add(element);
 				}
-
-				publishXml.AppendLine("  </webresources>");
 			}
-			if (this.tableList.Count > 0)
-			{
-				publishXml.AppendLine();
-				publishXml.AppendLine("  <entities>");
-
-				foreach (var id in tableList)
-				{
-					publishXml.Append("    <entity>").Append(id).Append("</entity>").AppendLine();
-				}
-
-				publishXml.AppendLine("  </entities>");
-			}
-
-			publishXml.Append("</importexportxml>");
 
 			var request = new PublishXmlRequest
 			{
-				ParameterXml = publishXml.ToString()
+				ParameterXml = this.xml.ToString()
 			};
 
+			this.xml.Root?.RemoveNodes();
 			return request;
 		}
 	}

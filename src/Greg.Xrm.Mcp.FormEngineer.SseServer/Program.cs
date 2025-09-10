@@ -1,5 +1,5 @@
 ﻿using Greg.Xrm.Mcp.Core;
-using Greg.Xrm.Mcp.FormEngineer.Server.Tools;
+using Greg.Xrm.Mcp.Server.Tools;
 
 namespace Greg.Xrm.Mcp.FormEngineer.SseServer
 {

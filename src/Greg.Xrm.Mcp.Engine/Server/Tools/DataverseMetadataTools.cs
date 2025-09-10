@@ -1,11 +1,14 @@
 ﻿using Greg.Xrm.Mcp.Core.Authentication;
+using Greg.Xrm.Mcp.FormEngineer.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Query;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using Newtonsoft.Json;
 using System.ComponentModel;
 
-namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
+namespace Greg.Xrm.Mcp.Server.Tools
 {
 	[McpServerToolType]
 	public class DataverseMetadataTools
@@ -128,6 +131,51 @@ namespace Greg.Xrm.Mcp.FormEngineer.Server.Tools
 			catch (Exception ex)
 			{
 				logger.LogError(ex, "An error occurred while retrieving Dataverse tables.");
+				return $"Error: {ex.Message}";
+			}
+		}
+
+
+
+
+		[McpServerTool(
+			Name = "dataverse_metadata_list_webresources_html",
+			ReadOnly = true,
+			Idempotent = true,
+			Destructive = false
+		),
+		Description(
+"Retrieves the list of HTML Web Resources available in Dataverse. HTML Web Resources are the only type of webresource that we can put in the sitemap as SubArea."),]
+		public static async Task<string> RetrieveDataverseHtmlWebResources(
+			ILogger<DataverseMetadataTools> logger,
+			IDataverseClientProvider clientProvider)
+		{
+			logger.LogTrace("{ToolName} called.",
+				   nameof(RetrieveDataverseHtmlWebResources));
+
+
+
+			try
+			{
+				using var context = await clientProvider.GetDataverseContextAsync();
+
+				var items = context.WebResourceSet
+					.Where(wr => wr.WebResourceType == webresource_webresourcetype.Webpage_HTML) // 1 = HTML
+					.Select(wr => new
+					{
+						wr.Name,
+						wr.DisplayName,
+						wr.WebResourceId
+					})
+					.OrderBy(wr => wr.Name)
+					.ToList();
+
+				var tablesText = JsonConvert.SerializeObject(items, Formatting.Indented);
+				return tablesText;
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An error occurred while retrieving Dataverse webresources.");
 				return $"Error: {ex.Message}";
 			}
 		}

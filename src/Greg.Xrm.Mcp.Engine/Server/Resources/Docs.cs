@@ -2,7 +2,7 @@
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace Greg.Xrm.Mcp.FormEngineer.Server.Resources
+namespace Greg.Xrm.Mcp.Server.Resources
 {
 	[McpServerResourceType]
 	public class Docs

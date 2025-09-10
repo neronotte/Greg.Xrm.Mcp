@@ -35,6 +35,14 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 			<SubType>Designer</SubType>
 		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\SiteMap.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\SiteMapType.xsd">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<SubType>Designer</SubType>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>

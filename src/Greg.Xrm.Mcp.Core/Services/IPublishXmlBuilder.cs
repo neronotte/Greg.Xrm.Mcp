@@ -7,6 +7,8 @@ namespace Greg.Xrm.Mcp.Core.Services
 		void Clear();
 
 		void AddWebResource(Guid id);
+		void AddSiteMap(Guid id);
+		void AddAppModule(Guid id);
 		void AddTable(string tableName);
 
 		PublishXmlRequest? Build();

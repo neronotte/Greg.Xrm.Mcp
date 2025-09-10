@@ -105,6 +105,17 @@ namespace Greg.Xrm.Mcp.FormEngineer.Model
 				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.UserQuery>();
 			}
 		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="Greg.Xrm.Mcp.FormEngineer.Model.WebResource"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<Greg.Xrm.Mcp.FormEngineer.Model.WebResource> WebResourceSet
+		{
+			get
+			{
+				return this.CreateQuery<Greg.Xrm.Mcp.FormEngineer.Model.WebResource>();
+			}
+		}
 	}
 }
 #pragma warning restore CS1591

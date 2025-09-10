@@ -16,7 +16,8 @@
         "appmodule",
         "appmodulecomponent",
         "appmoduleroles",
-        "sitemap"
+        "sitemap",
+        "webresource"
     ],
   "emitEntityETC": false,
   "emitVirtualAttributes": false
