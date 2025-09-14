@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.FormEngineer", "src\Greg.Xrm.Mcp.FormEngineer\Greg.Xrm.Mcp.FormEngineer.csproj", "{9E0E7035-5081-4EF1-97D0-E925A2A54D83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.AppMaker", "src\Greg.Xrm.Mcp.AppMaker\Greg.Xrm.Mcp.AppMaker.csproj", "{9E0E7035-5081-4EF1-97D0-E925A2A54D83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.Core", "src\Greg.Xrm.Mcp.Core\Greg.Xrm.Mcp.Core.csproj", "{860E833B-1846-4192-8372-C27D3191972E}"
 EndProject
@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{02EA681E-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9969CE0E-FD11-42C0-BCB1-FAB1E6878349}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.FormEngineer.TestSuite", "test\Greg.Xrm.Mcp.FormEngineer.TestSuite\Greg.Xrm.Mcp.FormEngineer.TestSuite.csproj", "{CAA958F4-4159-445F-ACE3-AAE34B99C998}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.AppMaker.TestSuite", "test\Greg.Xrm.Mcp.AppMaker.TestSuite\Greg.Xrm.Mcp.AppMaker.TestSuite.csproj", "{CAA958F4-4159-445F-ACE3-AAE34B99C998}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.FormEngineer.ConsoleUI", "test\Greg.Xrm.Mcp.FormEngineer.ConsoleUI\Greg.Xrm.Mcp.FormEngineer.ConsoleUI.csproj", "{D261C99D-93A4-417D-A3B5-1A42E577541E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.AppMaker.ConsoleUI", "test\Greg.Xrm.Mcp.AppMaker.ConsoleUI\Greg.Xrm.Mcp.AppMaker.ConsoleUI.csproj", "{D261C99D-93A4-417D-A3B5-1A42E577541E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.Monitor", "src\Greg.Xrm.Mcp.Monitor\Greg.Xrm.Mcp.Monitor.csproj", "{1BBE12AE-065A-49EE-8152-21617CA1DFEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.FormEngineer.SseServer", "src\Greg.Xrm.Mcp.FormEngineer.SseServer\Greg.Xrm.Mcp.FormEngineer.SseServer.csproj", "{DDC4BC9D-CF2C-494D-B786-3E2F8D66C856}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.AppMaker.SseServer", "src\Greg.Xrm.Mcp.AppMaker.SseServer\Greg.Xrm.Mcp.AppMaker.SseServer.csproj", "{DDC4BC9D-CF2C-494D-B786-3E2F8D66C856}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Greg.Xrm.Mcp.Engine", "src\Greg.Xrm.Mcp.Engine\Greg.Xrm.Mcp.Engine.csproj", "{690117FA-80A8-4598-A993-821E360306A7}"
 EndProject

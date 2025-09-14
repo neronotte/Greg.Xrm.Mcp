@@ -57,7 +57,7 @@ If the user asks to add a webresource to the sitemap, BE SURE that the webresour
 				var amc = query.AddLink("appmodulecomponent", "appmoduleidunique", "appmoduleidunique", JoinOperator.LeftOuter);
 				amc.EntityAlias = "amc";
 				amc.LinkCriteria.AddCondition("componenttype", ConditionOperator.Equal, 62); // 62 = Sitemap
-				var sm = amc.AddLink("sitemap", "objectid", "sitemapid");
+				var sm = amc.AddLink("sitemap", "objectid", "sitemapid", JoinOperator.LeftOuter);
 				sm.EntityAlias = "sm";
 				sm.Columns.AddColumns("sitemapid", "sitemapxml", "sitemapname");
 				query.TopCount = 1;

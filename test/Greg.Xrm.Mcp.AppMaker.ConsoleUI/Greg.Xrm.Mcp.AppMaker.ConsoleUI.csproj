@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Greg.Xrm.Mcp.FormEngineer\Greg.Xrm.Mcp.FormEngineer.csproj" />
+    <ProjectReference Include="..\..\src\Greg.Xrm.Mcp.AppMaker\Greg.Xrm.Mcp.AppMaker.csproj" />
   </ItemGroup>
 
   <ItemGroup>

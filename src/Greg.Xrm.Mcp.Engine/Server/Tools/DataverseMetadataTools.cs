@@ -2,8 +2,6 @@
 using Greg.Xrm.Mcp.FormEngineer.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Query;
-using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using Newtonsoft.Json;
 using System.ComponentModel;
@@ -46,7 +44,9 @@ namespace Greg.Xrm.Mcp.Server.Tools
 				.Where(e => !e.IsIntersect.GetValueOrDefault())
 				.Select(e => new
 				{
+					Id = e.MetadataId,
 					e.SchemaName,
+					e.LogicalName,
 					DisplayName = e.DisplayName?.UserLocalizedLabel?.Label ?? "No Display Name"
 				})
 				.OrderBy(e => e.SchemaName)

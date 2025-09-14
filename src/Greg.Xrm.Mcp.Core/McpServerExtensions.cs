@@ -1,6 +1,7 @@
 ﻿using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using ModelContextProtocol;
+using static ModelContextProtocol.Protocol.ElicitRequestParams;
 
 namespace Greg.Xrm.Mcp.Core
 {
@@ -24,6 +25,38 @@ namespace Greg.Xrm.Mcp.Core
 
 			await server.NotifyProgressAsync(progressToken, value, cancellationToken);
 			return progressToken;
+		}
+
+
+		public static async Task<(bool, string)> ElicitTextAsync(this IMcpServer server, string question)
+		{
+			ArgumentNullException.ThrowIfNull(server);
+			ArgumentNullException.ThrowIfNullOrWhiteSpace(question);
+
+			var elicitResponse = await server.ElicitAsync(new ElicitRequestParams
+			{
+				Message = question,
+				RequestedSchema = new RequestSchema {
+					Properties = new Dictionary<string, PrimitiveSchemaDefinition>
+					{
+	 	               ["Answer"] = new StringSchema()
+					}
+				}
+			});
+
+			if (elicitResponse.Action != "accept" )
+			{
+				return (false, string.Empty);
+			}
+
+			var answer = elicitResponse.Content?["Answer"].GetString();
+
+			if (string.IsNullOrWhiteSpace(answer))
+			{
+				return (false, string.Empty);
+			}
+
+			return (true, answer);
 		}
 	}
 }

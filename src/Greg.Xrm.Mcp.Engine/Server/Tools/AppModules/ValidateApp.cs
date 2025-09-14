@@ -33,7 +33,7 @@ It is strongly recommended to run the current tool after any change on the appmo
 
 			if (string.IsNullOrWhiteSpace(appModuleName))
 			{
-			return "❌ Error: appModuleName is mandatory.";
+				return "❌ Error: appModuleName is mandatory.";
 			}
 
 			try
