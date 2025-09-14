@@ -23,7 +23,7 @@ namespace Greg.Xrm.Mcp.Core.Services
 			this.sitemaps = new XElement("sitemaps");
 			this.appmodules = new XElement("appmodules");
 			this.webresources = new XElement("webresources");
-			this.tables = new XElement("tables");
+			this.tables = new XElement("entities");
 			this.elements = [this.sitemaps, this.appmodules, this.webresources, this.tables];
 
 			Clear();
