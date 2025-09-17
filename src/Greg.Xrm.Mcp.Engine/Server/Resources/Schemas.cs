@@ -91,7 +91,7 @@ FormType is the root object of the schema."),
 			Title = "Dataverse FetchXml Schema", 
 			UriTemplate = "schema://fetchxml"),
 		Description(
-			"Returns the XML schema of the query that runs Dataverse."),
+			"Returns the XML schema of the query that runs Dataverse views."),
 		]
 		public async Task<string> FetchXmlSchema()
 		{

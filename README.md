@@ -11,7 +11,9 @@
 
 ## 👁️ Vision
 
-Transform your Dataverse development experience with AI-powered tools that understand your business context. **Greg.Xrm.Mcp** is not just another development tool—it's a **foundational framework** designed to revolutionize how developers interact with Microsoft Dataverse through intelligent AI assistants like GitHub Copilot.
+Transform your Dataverse development experience with AI-powered tools that understand your business context. **Greg.Xrm.Mcp** is a **foundational framework** designed to revolutionize how developers interact with Microsoft Dataverse through intelligent MCP-enabled AI assistants (VS Code Copilot MCP extension, Claude Desktop, and other MCP clients).
+
+---
 
 ## 🏗️ Framework Architecture
 
@@ -21,72 +23,126 @@ At its core, **Greg.Xrm.Mcp** provides a robust foundation for building speciali
 
 - 🔐 **Unified Authentication**: Standardized Dataverse connection and token management
 - 🔧 **Common Services**: Reusable components for metadata, queries, and operations
-- � **MCP Integration**: Built-in Model Context Protocol server capabilities
-- 🛡️ **Error Handling**: Comprehensive error management and logging
+- 🔌 **MCP Integration**: Built-in Model Context Protocol server capabilities (stdio-based and sse-based)
+- 🛡️ **Error Handling**: Comprehensive error management and structured logging
 - ⚡ **Performance**: Optimized for real-time AI assistant interactions
 
-### **Specialized MCP Servers** - Domain-Specific Solutions
+---
 
-Build targeted solutions for specific Dataverse scenarios using the core framework, enabling:
+## ✅ Current Capabilities (AppMaker Server)
 
-- 🎯 **Domain Expertise**: Focused tools for forms, security, workflows, and more
-- 🔗 **Consistent Patterns**: Standardized authentication and connection handling
-- 📚 **Rapid Development**: Leverage proven components and patterns
-- 🌟 **Extensible Design**: Add new capabilities without starting from scratch
+The flagship implementation **Greg.Xrm.Mcp.AppMaker** currently offers:
 
-## 📦 Current Implementation
+- 🛠️ **Tools**
+   - 📦 **Dataverse Metadata Access**:
+       - 📂 **List all tables in a given environment**
+       - 📂 **List all columns of a given table**
+   - 📦 **System Form Manipulation**:
+       - 📂 **Form Inventory**: List all forms for a Dataverse table (formatted text or JSON)
+       - 🧬 **Form Definition Retrieval**: Fetch form definition (XML or JSON) with metadata
+       - 🧹 **Form Updater**: Updates the structure of a form using AI-generated layout (LLM-assisted, non-deterministic)
+       - ✅ **FormXML Validation**: Validate FormXML structure and report issues
+   - 📦 **Saved Query (view) Management**:
+       - 📂 **Saved Query Inventory**: List all saved queries for a table (formatted text or JSON)
+       - 🧬 **Saved Query Definition Retrieval**: Fetch saved query definition (both FetchXML and LayoutXML)
+       - 🧹 **Saved Query Updater**: Updates the structure of a view using AI-generated layout and filters (LLM-assisted, non-deterministic)
+       - 🧹 **Saved Query Maker**: Creates new views using AI-generated layout and filters (LLM-assisted, non-deterministic)
+       - 📝 **Saved Query Renamer**: Allows to change the name of an existing view
+   - 📦 **AppModules and Sitemaps**
+       - 🧭 **App Module Inventory**: Enumerate all model-driven apps with version, managed status, default flag, configuration XML, and associated security roles
+       - ➕ **Add/Remove App Components**: Adds or removes table definitions from an app.
+       - 🧹 **Create new AppModules**: Creates new Apps, with tables and sitemap.
+       - ✅ **AppModule Validation**: Validate the structure and contents of given AppModule and report issues
+       - 🧬 **Sitemap Definition Retrieval**: retrieves the XML defining the structure of a given app Sitemap
+       - 🧹 **Sitemap Updater**: Updates the structure of a form using AI-generated layout (LLM-assisted, non-deterministic)
+- 📄 **Resources**
+    - `docs://instructions_for_formxml`: Instructions to be aware of when manipulating Dataverse FormXml
+    - `schema://formxml`: Returns a set of Xml schemas defining the structure of Dataverse forms.
+    - `schema://layoutxml`: Returns the XML schema describing the structure of Dataverse views in terms of columns.
+    - `schema://fetchxml`: Returns the XML schema of the query that runs Dataverse views. 
+    - `schema://sitemapxml`: Returns a set of Xml schemas defining the structure of Dataverse sitemap (navigation bar), and instructions on how to properly generate a SiteMap XML document.
 
-### 🎨 Greg.Xrm.Mcp.FormEngineer
+---
 
-**AI-Powered Dataverse Form Engineering**
+## 🔌 MCP Usage
 
-The flagship implementation of the framework, **Greg.Xrm.Mcp.FormEngineer** demonstrates the power of specialized MCP servers for Dataverse development. This server revolutionizes form development by providing:
+The server runs as a **Model Context Protocol** (stdio) endpoint. You can connect via:
 
-- **🔍 Intelligent Form Discovery**: Smart retrieval and filtering of Dataverse forms
-- **🎨 Natural Language Form Editing**: Modify forms using conversational AI commands
-- **📋 Schema Validation**: Real-time FormXML validation against official schemas
-- **🔄 Automated Publishing**: Seamless form updates with intelligent publishing
-- **💡 Best Practices**: Automated form cleanup and standardization
-
-> 👉 **For detailed installation instructions, usage examples, and advanced features, see [Greg.Xrm.Mcp.FormEngineer/README.md](src/Greg.Xrm.Mcp.FormEngineer/README.md)**
-
-## 🤝 Contributing
-
-We welcome contributions! Whether you're:
-
-- 🐛 **Reporting bugs** or requesting features
-- 💡 **Building new specialized MCP servers** using our framework
-- 📖 **Improving documentation** and examples
-- 🔧 **Enhancing the core framework** capabilities
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- **.NET 9 SDK** or later
-- **Visual Studio Code** with GitHub Copilot extension
-- **Microsoft Dataverse environment** access
+- **VS Code** (GitHub Copilot MCP extension)
+- **Claude Desktop** (custom MCP server config)
 
 ### Installation
 
-Install the FormEngineer MCP server as a global tool:
-
 ```powershell
-dotnet tool install --global Greg.Xrm.Mcp.FormEngineer
+dotnet tool install --global Greg.Xrm.Mcp.AppMaker
 ```
 
-For detailed setup and configuration instructions, see the [FormEngineer documentation](src/Greg.Xrm.Mcp.FormEngineer/README.md).
+### VS Code (.vscode/mcp.json snippet)
+
+```json
+{
+    "servers": {
+        "AppMaker": {
+            "command": "Greg.Xrm.Mcp.AppMaker",
+            "args": [
+                "--dataverseUrl",
+                "https://yourorg.crm.dynamics.com"
+            ],
+            "cwd": "${workspaceFolder}"
+        }
+    }
+}
+```
+
+### Claude Desktop (config fragment)
+
+```json
+{
+    "mcpServers": {
+        "AppMaker": {
+            "command": "Greg.Xrm.Mcp.AppMaker",
+            "args": [
+                "--dataverseUrl",
+                "https://yourorg.crm.dynamics.com"
+            ],
+        }
+    }
+}
+```
+
+---
+
+## 🔐 Authentication
+
+The tool uses OAuth authentication to connect to Dataverse. You can simply provide your Dataverse URL as a command-line argument, as described above.
+The tool will then prompt you to authenticate via a browser window. The authentication is managed by official `Microsoft.PowerPlatform.Dataverse.Client` library.
+Authentication tokens are cached locally for reuse.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions:
+- 🐛 Bug reports & feature requests
+- 🧩 New specialized MCP servers
+- 📖 Documentation improvements
+- 🛠️ Core enhancements / performance tuning
+
+---
 
 ## 🏷️ License
 
 This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
 
+---
+
 ## 🏳️ Important Disclaimer 🏳️
 
-The tool is in preview and provided as it is.
-Always backup your existing customizations before making any changes.
-The brain of the tool is your favorite LLM companion, that by definition is not deterministic.
-The author is not responsible of any issue that can be generated on your form customization by the misuse of the tool.
+- The toolset is in preview and provided as-is.
+- Always export / backup solutions before applying modifications.
+- LLM-assisted operations (form editing/cleanup) are inherently non-deterministic.
+- Read-only tools (listing & inspection) are safe for production observation.
+- The author is not responsible for misuse leading to unintended customization changes.
 
 ---
 
