@@ -13,6 +13,9 @@
 
 Transform your Dataverse development experience with AI-powered tools that understand your business context. **Greg.Xrm.Mcp** is a **foundational framework** designed to revolutionize how developers interact with Microsoft Dataverse through intelligent MCP-enabled AI assistants (VS Code Copilot MCP extension, Claude Desktop, and other MCP clients).
 
+
+[▶️ Check-out this video](https://www.youtube.com/watch?v=mvtVm2o9YbI) showcasing the tool in action.
+
 ---
 
 ## 🏗️ Framework Architecture
@@ -109,7 +112,6 @@ dotnet tool install --global Greg.Xrm.Mcp.AppMaker
     }
 }
 ```
-
 ---
 
 ## 🔐 Authentication
