@@ -1,4 +1,5 @@
-﻿using Greg.Xrm.Mcp.Core.Authentication;
+﻿using Greg.Xrm.Mcp.Core;
+using Greg.Xrm.Mcp.Core.Authentication;
 using Greg.Xrm.Mcp.Core.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xrm.Sdk;
@@ -46,6 +47,8 @@ If the user asks to add a webresource to the sitemap, BE SURE that the webresour
 			{
 				return "❌ Error: siteMapXml is mandatory.";
 			}
+
+			siteMapXml = siteMapXml.RemoveXmlDeclaration();
 
 			try
 			{

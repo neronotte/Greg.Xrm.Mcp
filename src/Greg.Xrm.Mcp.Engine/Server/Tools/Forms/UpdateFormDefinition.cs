@@ -1,4 +1,5 @@
-﻿using Greg.Xrm.Mcp.Core.Authentication;
+﻿using Greg.Xrm.Mcp.Core;
+using Greg.Xrm.Mcp.Core.Authentication;
 using Greg.Xrm.Mcp.Core.Services;
 using Greg.Xrm.Mcp.FormEngineer.Services;
 using Microsoft.Extensions.Logging;
@@ -110,6 +111,8 @@ Be sure to validate the formXml against it's schema definition before executing 
 
 			try
 			{
+				formXml = formXml.RemoveXmlDeclaration()!;
+
 				var validationResult = validator.TryValidateFormXmlAgainstSchema(formXml);
 				if (!validationResult.IsValid)
 				{

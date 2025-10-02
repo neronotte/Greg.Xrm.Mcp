@@ -51,6 +51,10 @@ attributes from the related entity must be add with an <attribute> node inside t
 
 			try
 			{
+
+				newLayoutXml = newLayoutXml.RemoveXmlDeclaration()!;
+				newFetchXml = newFetchXml.RemoveXmlDeclaration();
+
 				var client = await clientProvider.GetDataverseClientAsync();
 
 				var token = await mcpServer.NotifyProgressAsync(nameof(UpdateViewDefinition), "Retrieving view...");
