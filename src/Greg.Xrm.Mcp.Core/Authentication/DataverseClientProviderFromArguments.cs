@@ -23,14 +23,14 @@ namespace Greg.Xrm.Mcp.Core.Authentication
 				var accessToken = await TokenCache.TryGetAccessTokenAsync(dataverseUrl);
 				if (accessToken == null)
 				{
-					crm = await CreateServiceClientFromConnectionString(dataverseUrl);
+					crm = await CreateServiceClientAsync(dataverseUrl);
 				}
 				else
 				{
 					crm = new ServiceClient(accessToken.ServiceUri, uri => Task.FromResult(accessToken.AccessToken));
 					if (!crm.IsReady)
 					{
-						crm = await CreateServiceClientFromConnectionString(dataverseUrl);
+						crm = await CreateServiceClientAsync(dataverseUrl);
 					}
 
 				}
@@ -45,11 +45,11 @@ namespace Greg.Xrm.Mcp.Core.Authentication
 				}
 				catch (DataverseConnectionException)
 				{
-					return await CreateServiceClientFromConnectionString(dataverseUrl);
+					return await CreateServiceClientAsync(dataverseUrl);
 				}
 				catch (System.ServiceModel.Security.MessageSecurityException)
 				{
-					return await CreateServiceClientFromConnectionString(dataverseUrl);
+					return await CreateServiceClientAsync(dataverseUrl);
 				}
 
 				return crm;
@@ -66,7 +66,34 @@ namespace Greg.Xrm.Mcp.Core.Authentication
 			}
 		}
 
-		private static async Task<ServiceClient> CreateServiceClientFromConnectionString(string dataverseUrl)
+		private static async Task<ServiceClient> CreateServiceClientAsync(string dataverseUrl)
+		{
+			// Try device-code flow first to get a fresh access token
+			string accessToken;
+			try
+			{
+				accessToken = await DeviceCodeAuthProvider.AcquireTokenAsync(dataverseUrl);
+			}
+			catch (Exception ex)
+			{
+				// Fallback: try OAuth loopback (works if a browser is available)
+				Console.Error.WriteLine($"[Greg.Xrm.Mcp] device-code failed ({ex.Message}), falling back to OAuth loopback...");
+				return await CreateServiceClientFromConnectionStringFallback(dataverseUrl);
+			}
+
+			var serviceUri = new Uri(dataverseUrl.TrimEnd('/'));
+			var crm = new ServiceClient(serviceUri, uri => Task.FromResult(accessToken));
+			if (!crm.IsReady)
+			{
+				await TokenCache.ClearAccessTokenAsync(dataverseUrl);
+				throw new McpException($"Failed to connect to Dataverse at {dataverseUrl} after device-code auth. Error: {crm.LastError}");
+			}
+
+			await TokenCache.SaveAccessTokenAsync(dataverseUrl, crm.ConnectedOrgUriActual, accessToken);
+			return crm;
+		}
+
+		private static async Task<ServiceClient> CreateServiceClientFromConnectionStringFallback(string dataverseUrl)
 		{
 			var connectionString = $"AuthType=OAuth;Url={dataverseUrl};RedirectUri=http://localhost;LoginPrompt=Auto";
 			var crm = new ServiceClient(connectionString);
