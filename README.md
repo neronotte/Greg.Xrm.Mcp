@@ -1,4 +1,4 @@
-﻿# 🚀 Greg.Xrm.Mcp
+# 🚀 Greg.Xrm.Mcp
 
 **A Comprehensive Framework for Building Model Context Protocol (MCP) Servers for Microsoft Dataverse**
 
@@ -116,11 +116,130 @@ dotnet tool install --global Greg.Xrm.Mcp.AppMaker
 
 ## 🔐 Authentication
 
-The tool uses OAuth authentication to connect to Dataverse. You can simply provide your Dataverse URL as a command-line argument, as described above.
-The tool will then prompt you to authenticate via a browser window. The authentication is managed by official `Microsoft.PowerPlatform.Dataverse.Client` library.
-Authentication tokens are cached locally for reuse.
+This tool supports two authentication modes, tried in order:
+
+### 1. Device-code (default — works everywhere)
+
+When no cached token exists, the server starts a device-code flow via MSAL. The user code and sign-in URL appear immediately in the MCP server's stderr output (visible in VS Code's **Output → MCP** panel or terminal):
+
+```
+========================================
+Device code active: AJMAKZ4TH
+Waiting at: https://login.microsoft.com/device
+Status: Pending your MFA completion
+Once you enter that code and sign in, the MCP server will complete authentication automatically.
+========================================
+```
+
+Open [https://login.microsoft.com/device](https://login.microsoft.com/device) in any browser, enter the code, and complete MFA. The server polls silently and resumes automatically — no timeout, no restart needed.
+
+### 2. OAuth loopback (automatic fallback)
+
+If device-code fails (e.g. network policy blocks the device endpoint), the server falls back to `AuthType=OAuth;LoginPrompt=Auto`, which opens a browser window and completes auth via a local redirect at `http://localhost`.
+
+### Token cache
+
+After successful authentication, the access token is cached at:
+
+```
+%LocalAppData%\Greg.Xrm.Mcp.Core\tokenCache\tokens.json
+```
+
+Subsequent tool calls reuse the cached token with no re-prompt.
+
+### Optional environment variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `DATAVERSE_CLIENT_ID` | `51f81489-...` (Power Platform public AppId) | Override the Azure AD app registration |
+| `DATAVERSE_TENANT_ID` | `organizations` (multi-tenant) | Override for single-tenant scenarios |
 
 ---
+
+## 🔌 MCP Client Configuration
+
+### VS Code — `.vscode/mcp.json` (stdio, global dotnet tool)
+
+Install the tool globally first:
+
+```powershell
+dotnet tool install --global Greg.Xrm.Mcp.AppMaker
+```
+
+Then add to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "AppMaker": {
+      "type": "stdio",
+      "command": "Greg.Xrm.Mcp.AppMaker",
+      "args": [
+        "--dataverseUrl",
+        "https://yourorg.crm.dynamics.com"
+      ]
+    }
+  }
+}
+```
+
+### VS Code — `.vscode/mcp.json` (stdio, local source build)
+
+```json
+{
+  "servers": {
+    "AppMaker": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "C:\\path\\to\\Greg.Xrm.Mcp\\src\\Greg.Xrm.Mcp.AppMaker\\Greg.Xrm.Mcp.AppMaker.csproj",
+        "--",
+        "--dataverseUrl",
+        "https://yourorg.crm.dynamics.com"
+      ]
+    }
+  }
+}
+```
+
+### VS Code — `.vscode/mcp.json` (SSE server)
+
+Start the SSE server first (`dotnet run` in `Greg.Xrm.Mcp.AppMaker.SseServer`, listens on `http://localhost:22000` by default), then connect:
+
+```json
+{
+  "servers": {
+    "AppMaker": {
+      "type": "sse",
+      "url": "http://localhost:22000/sse",
+      "headers": {
+        "X-Dataverse-Url": "https://yourorg.crm.dynamics.com"
+      }
+    }
+  }
+}
+```
+
+### Claude Desktop — `claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "AppMaker": {
+      "command": "Greg.Xrm.Mcp.AppMaker",
+      "args": [
+        "--dataverseUrl",
+        "https://yourorg.crm.dynamics.com"
+      ]
+    }
+  }
+}
+```
+
+> **First run:** Watch the terminal or VS Code Output panel for the device-code prompt. Enter the code at [https://login.microsoft.com/device](https://login.microsoft.com/device). Subsequent runs use the cached token automatically.
+
 
 ## 🤝 Contributing
 
