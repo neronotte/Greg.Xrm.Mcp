@@ -57,12 +57,12 @@ namespace Greg.Xrm.Mcp.FormEngineer.TestSuite.TestHelpers
 		public static string EmptyFormXml => "<form></form>";
 
 		/// <summary>
-		/// Lista di entità di test comuni
+		/// Lista di entitï¿½ di test comuni
 		/// </summary>
-		public static readonly string[] CommonTestEntities = 
+		public static readonly string[] CommonTestEntities =
 		{
 			"account",
-			"contact", 
+			"contact",
 			"lead",
 			"opportunity",
 			"incident",
@@ -88,6 +88,10 @@ namespace Greg.Xrm.Mcp.FormEngineer.TestSuite.TestHelpers
 			public static readonly Guid FormId1 = new("11111111-1111-1111-1111-111111111111");
 			public static readonly Guid FormId2 = new("22222222-2222-2222-2222-222222222222");
 			public static readonly Guid FormId3 = new("33333333-3333-3333-3333-333333333333");
+
+			public static readonly Guid ChartId1 = new("44444444-4444-4444-4444-444444444444");
+			public static readonly Guid ChartId2 = new("55555555-5555-5555-5555-555555555555");
+			public static readonly Guid ChartId3 = new("66666666-6666-6666-6666-666666666666");
 		}
 
 		/// <summary>
@@ -97,9 +101,56 @@ namespace Greg.Xrm.Mcp.FormEngineer.TestSuite.TestHelpers
 		{
 			public const string InvalidGuid = "Invalid formId";
 			public const string FormNotFound = "No form found with ID";
+			public const string ChartNotFound = "No chart found with ID";
 			public const string EmptyXml = "empty or null";
 			public const string RootMissing = "Root element is missing";
 			public const string ValidationFailed = "Form XML validation failed";
 		}
+
+		/// <summary>
+		/// Valid chart DataDescription XML for tests
+		/// </summary>
+		public static string ValidChartDataDescription => @"<datadefinition>
+	<fetchcollection>
+		<fetch mapping=""logical"" aggregate=""true"">
+			<entity name=""account"">
+				<attribute name=""accountid"" alias=""accountid"" groupby=""true"" />
+				<attribute name=""name"" alias=""name"" groupby=""true"" />
+				<attribute name=""revenue"" alias=""sum_revenue"" aggregate=""sum"" />
+			</entity>
+		</fetch>
+	</fetchcollection>
+	<categorycollection>
+		<category>
+			<measurecollection>
+				<measure alias=""sum_revenue"" />
+			</measurecollection>
+		</category>
+	</categorycollection>
+</datadefinition>";
+
+		/// <summary>
+		/// Valid chart PresentationDescription XML for tests
+		/// </summary>
+		public static string ValidChartPresentationDescription => @"<Chart>
+	<Series>
+		<Series ChartType=""Column"" IsValueShownAsLabel=""True"">
+			<Points />
+		</Series>
+	</Series>
+	<ChartAreas>
+		<ChartArea>
+			<AxisY LabelAutoFitMaxFontSize=""8"">
+				<MajorGrid LineColor=""LightGray"" />
+			</AxisY>
+			<AxisX LabelAutoFitMaxFontSize=""8"">
+				<MajorGrid Enabled=""False"" />
+			</AxisX>
+		</ChartArea>
+	</ChartAreas>
+	<Titles>
+		<Title Name=""Title1"" Alignment=""TopLeft"" />
+	</Titles>
+</Chart>";
 	}
 }

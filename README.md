@@ -58,6 +58,11 @@ The flagship implementation **Greg.Xrm.Mcp.AppMaker** currently offers:
        - ✅ **AppModule Validation**: Validate the structure and contents of given AppModule and report issues
        - 🧬 **Sitemap Definition Retrieval**: retrieves the XML defining the structure of a given app Sitemap
        - 🧹 **Sitemap Updater**: Updates the structure of a form using AI-generated layout (LLM-assisted, non-deterministic)
+   - 📦 **Chart (Visualization) Management**:
+       - 📊 **Chart Inventory**: List all charts for a Dataverse table (formatted text or JSON)
+       - 🧬 **Chart Definition Retrieval**: Fetch chart definition including DataDescription XML (data query) and PresentationDescription XML (visual appearance)
+       - 🧹 **Chart Creator**: Creates new charts with custom data queries and visual presentations
+       - 🔄 **Chart Updater**: Updates existing chart definitions including data queries and visual styling
 - 📄 **Resources**
     - `docs://instructions_for_formxml`: Instructions to be aware of when manipulating Dataverse FormXml
     - `schema://formxml`: Returns a set of Xml schemas defining the structure of Dataverse forms.

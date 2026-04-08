@@ -12,6 +12,7 @@ namespace Greg.Xrm.Mcp
 			****************************************************************************/
 			services.AddTransient<IFormService, FormService>();
 			services.AddTransient<IFormXmlValidator, FormXmlValidator>();
+			services.AddTransient<IChartService, ChartService>();
 
 			// Add any common services here that should be available in all MCP hosts
 			return services;
